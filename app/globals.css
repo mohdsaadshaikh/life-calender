@@ -38,6 +38,21 @@
   --sidebar-accent-foreground: oklch(0.1 0 0);
   --sidebar-border: oklch(0.1 0 0);
   --sidebar-ring: oklch(0.1 0 0);
+
+  /* Life Calendar Color Scheme */
+  --week-past: #7ed957;
+  --week-current: #ff914d;
+  --week-future: transparent;
+  --event-green: #7ed957;
+  --event-yellow: #ffde59;
+  --event-orange: #ff914d;
+  --event-cyan: #5ce1e6;
+  --event-pink: #ff66c4;
+  --event-purple: #a855f7;
+  --event-blue: #38bdf8;
+  --event-rose: #f472b6;
+  --event-lime: #84cc16;
+  --event-burnt-orange: #f97316;
 }
 
 .dark {

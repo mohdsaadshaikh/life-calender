@@ -7,7 +7,6 @@ import { useState } from "react"
 import { Settings, Calendar, Clock, Download, Upload } from "lucide-react"
 import { useLifeCalendarStore } from "@/lib/life-calendar-store"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { useToast } from "@/hooks/use-toast"
 
@@ -132,122 +131,126 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
          </motion.button>
        </div>
 
-      <div className="p-6 space-y-8">
-        {/* Birth Date */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
-          <Label className="flex items-center gap-2 font-bold text-lg">
-            <Calendar className="w-5 h-5" /> BIRTH DATE
-          </Label>
-          <Input
-            type="date"
-            value={birthDateInput}
-            onChange={(e) => handleBirthDateChange(e.target.value)}
-            className="neo-border neo-shadow font-mono text-lg p-4"
-          />
-        </motion.div>
+       <form className="p-6 space-y-8">
+         {/* Birth Date - Fieldset */}
+         <fieldset>
+           <motion.legend initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 font-bold text-lg mb-3">
+             <Calendar className="w-5 h-5" /> BIRTH DATE
+           </motion.legend>
+           <Input
+             id="birth-date-input"
+             type="date"
+             value={birthDateInput}
+             onChange={(e) => handleBirthDateChange(e.target.value)}
+             className="neo-border neo-shadow font-mono text-lg p-4"
+             required
+             aria-required="true"
+           />
+         </fieldset>
 
-        {/* Life Expectancy */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="space-y-3"
-        >
-          <Label className="flex items-center gap-2 font-bold text-lg">
-            <Clock className="w-5 h-5" /> LIFE EXPECTANCY
-          </Label>
-          <div className="bg-muted neo-border p-4">
-            <div className="flex justify-between mb-4">
-              <span className="font-mono">Years</span>
-              <span className="font-bold text-2xl">{settings.lifeExpectancy}</span>
-            </div>
-            <Slider
-              value={[settings.lifeExpectancy]}
-              onValueChange={([value]) => setSettings({ lifeExpectancy: value })}
-              min={50}
-              max={120}
-              step={1}
-              className="w-full"
-            />
-            <div className="flex justify-between mt-2 text-sm text-muted-foreground">
-              <span>50</span>
-              <span>120</span>
-            </div>
-          </div>
-        </motion.div>
+         {/* Life Expectancy - Fieldset */}
+         <fieldset>
+           <motion.legend
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: 0.1 }}
+             className="flex items-center gap-2 font-bold text-lg mb-3"
+           >
+             <Clock className="w-5 h-5" /> LIFE EXPECTANCY
+           </motion.legend>
+           <div className="bg-muted neo-border p-4">
+             <div className="flex justify-between mb-4">
+               <label htmlFor="life-expectancy-slider" className="font-mono">Years</label>
+               <span className="font-bold text-2xl" aria-live="polite">{settings.lifeExpectancy}</span>
+             </div>
+             <Slider
+               id="life-expectancy-slider"
+               value={[settings.lifeExpectancy]}
+               onValueChange={([value]) => setSettings({ lifeExpectancy: value })}
+               min={50}
+               max={120}
+               step={1}
+               className="w-full"
+               aria-label="Life expectancy in years"
+             />
+             <div className="flex justify-between mt-2 text-sm text-muted-foreground">
+               <span>50</span>
+               <span>120</span>
+             </div>
+           </div>
+         </fieldset>
 
-        {/* Data Management */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="space-y-3"
-        >
-          <Label className="font-bold text-lg">DATA MANAGEMENT</Label>
-          <div className="space-y-3">
-             <motion.button
-               whileHover={{ scale: 1.02, x: 4 }}
-               whileTap={{ scale: 0.98 }}
-               onClick={handleExport}
-               className="w-full bg-primary neo-border neo-shadow p-4 font-bold flex items-center justify-center gap-3"
-               aria-label="Export calendar data as JSON backup"
-             >
-               <Download className="w-5 h-5" />
-               EXPORT BACKUP
-             </motion.button>
+         {/* Data Management - Fieldset */}
+         <fieldset>
+           <motion.legend
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: 0.2 }}
+             className="font-bold text-lg mb-3"
+           >
+             DATA MANAGEMENT
+           </motion.legend>
+           <div className="space-y-3">
+              <motion.button
+                type="button"
+                whileHover={{ scale: 1.02, x: 4 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleExport}
+                className="w-full bg-primary neo-border neo-shadow p-4 font-bold flex items-center justify-center gap-3"
+                aria-label="Export calendar data as JSON backup"
+              >
+                <Download className="w-5 h-5" />
+                EXPORT BACKUP
+              </motion.button>
 
-             <label className="block">
-               <motion.div
-                 whileHover={{ scale: 1.02, x: 4 }}
-                 whileTap={{ scale: 0.98 }}
-                 className="w-full bg-secondary neo-border neo-shadow p-4 font-bold flex items-center justify-center gap-3 cursor-pointer"
-               >
-                 <Upload className="w-5 h-5" />
-                 IMPORT BACKUP
-               </motion.div>
-               <input 
-                 type="file" 
-                 accept=".json" 
-                 onChange={handleImport} 
-                 className="hidden" 
-                 aria-label="Upload calendar data from JSON backup file"
-               />
-             </label>
-          </div>
-        </motion.div>
+              <label htmlFor="import-file-input" className="block">
+                <motion.div
+                  whileHover={{ scale: 1.02, x: 4 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full bg-secondary neo-border neo-shadow p-4 font-bold flex items-center justify-center gap-3 cursor-pointer"
+                >
+                  <Upload className="w-5 h-5" />
+                  IMPORT BACKUP
+                </motion.div>
+                <input 
+                  id="import-file-input"
+                  type="file" 
+                  accept=".json" 
+                  onChange={handleImport} 
+                  className="hidden" 
+                  aria-label="Upload calendar data from JSON backup file"
+                />
+              </label>
+           </div>
+         </fieldset>
 
-        {/* Quick Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-foreground text-background neo-border p-6"
-        >
-          <h3 className="font-bold mb-4">QUICK STATS</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-primary neo-border p-3 text-center">
-              <p className="text-2xl font-bold text-foreground">{events.length}</p>
-              <p className="text-xs font-bold text-foreground">Events</p>
-            </div>
-            <div className="bg-secondary neo-border p-3 text-center">
-              <p className="text-2xl font-bold text-foreground">{categories.length}</p>
-              <p className="text-xs font-bold text-foreground">Categories</p>
-            </div>
-            <div className="bg-accent neo-border p-3 text-center">
-              <p className="text-2xl font-bold text-foreground">{settings.lifeExpectancy * 52}</p>
-              <p className="text-xs font-bold text-foreground">Total Weeks</p>
-            </div>
-            <div className="bg-chart-4 neo-border p-3 text-center">
-              <p className="text-2xl font-bold text-foreground">
-                {Math.floor(
-                  (new Date().getTime() - new Date(settings.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 7),
-                )}
-              </p>
-              <p className="text-xs font-bold text-foreground">Weeks Lived</p>
-            </div>
-          </div>
-        </motion.div>
-      </div>
+         {/* Quick Stats - Fieldset */}
+         <fieldset className="bg-foreground text-background neo-border p-6" disabled>
+           <legend className="font-bold mb-4">QUICK STATS</legend>
+           <div className="grid grid-cols-2 gap-4">
+             <div className="bg-primary neo-border p-3 text-center">
+               <p className="text-2xl font-bold text-foreground">{events.length}</p>
+               <p className="text-xs font-bold text-foreground">Events</p>
+             </div>
+             <div className="bg-secondary neo-border p-3 text-center">
+               <p className="text-2xl font-bold text-foreground">{categories.length}</p>
+               <p className="text-xs font-bold text-foreground">Categories</p>
+             </div>
+             <div className="bg-accent neo-border p-3 text-center">
+               <p className="text-2xl font-bold text-foreground">{settings.lifeExpectancy * 52}</p>
+               <p className="text-xs font-bold text-foreground">Total Weeks</p>
+             </div>
+             <div className="bg-chart-4 neo-border p-3 text-center">
+               <p className="text-2xl font-bold text-foreground">
+                 {Math.floor(
+                   (new Date().getTime() - new Date(settings.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 7),
+                 )}
+               </p>
+               <p className="text-xs font-bold text-foreground">Weeks Lived</p>
+             </div>
+           </div>
+         </fieldset>
+       </form>
     </motion.div>
   )
 }

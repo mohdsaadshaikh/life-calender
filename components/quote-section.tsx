@@ -62,14 +62,7 @@ export function QuoteSection() {
             <span className="font-mono text-lg md:text-xl">— STEVE JOBS</span>
           </motion.div>
 
-          {/* Decorative Corner */}
-          <motion.div
-            animate={{ rotate: [0, 5, -5, 0] }}
-            transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
-            className="absolute -bottom-6 -right-6 bg-secondary neo-border w-16 h-16 flex items-center justify-center font-bold"
-          >
-            ✨
-          </motion.div>
+        
         </motion.div>
       </div>
     </section>

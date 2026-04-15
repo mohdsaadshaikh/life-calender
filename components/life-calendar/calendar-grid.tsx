@@ -2,6 +2,7 @@
 
 import { useRef, useMemo, useCallback } from "react";
 import { useLifeCalendarStore } from "@/lib/life-calendar-store";
+import { CALENDAR_COLORS } from "@/lib/life-calendar-utils";
 import type { WeekData } from "@/lib/life-calendar-utils";
 
 interface CalendarGridProps {
@@ -27,9 +28,9 @@ export function CalendarGrid({ onWeekClick }: CalendarGridProps) {
     if (week.events.length > 0) {
       return week.events[0].color;
     }
-    if (week.isCurrent) return "#ff914d";
-    if (week.isPast) return "#7ed957";
-    return "transparent";
+    if (week.isCurrent) return CALENDAR_COLORS.WEEK_CURRENT;
+    if (week.isPast) return CALENDAR_COLORS.WEEK_PAST;
+    return CALENDAR_COLORS.WEEK_FUTURE;
   }, []);
 
   const cellSize = 12 * zoomLevel;
@@ -125,11 +126,11 @@ export function CalendarGrid({ onWeekClick }: CalendarGridProps) {
       {/* Legend */}
       <div className="mt-8 flex flex-wrap gap-4 justify-center">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 neo-border bg-[#7ed957]" />
+          <div className="w-4 h-4 neo-border" style={{ backgroundColor: CALENDAR_COLORS.WEEK_PAST }} />
           <span className="text-sm font-medium">Lived</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 neo-border bg-[#ff914d] ring-2 ring-accent ring-offset-1" />
+          <div className="w-4 h-4 neo-border ring-2 ring-accent ring-offset-1" style={{ backgroundColor: CALENDAR_COLORS.WEEK_CURRENT }} />
           <span className="text-sm font-medium">Current</span>
         </div>
         <div className="flex items-center gap-2">

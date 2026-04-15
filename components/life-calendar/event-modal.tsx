@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import { X, Calendar, Tag, Type, AlignLeft, Palette, Trash2, Save } from "lucide-react"
 import { z } from "zod"
 import { useLifeCalendarStore } from "@/lib/life-calendar-store"
+import { CALENDAR_COLORS } from "@/lib/life-calendar-utils"
 import type { WeekData, LifeEvent, LifeCategory } from "@/lib/life-calendar-utils"
 import { formatDate } from "@/lib/life-calendar-utils"
 import { Input } from "@/components/ui/input"
@@ -19,16 +20,16 @@ interface EventModalProps {
 }
 
 const PRESET_COLORS = [
-  "#7ed957",
-  "#ffde59",
-  "#ff914d",
-  "#5ce1e6",
-  "#ff66c4",
-  "#a855f7",
-  "#38bdf8",
-  "#f472b6",
-  "#84cc16",
-  "#f97316",
+  CALENDAR_COLORS.GREEN,
+  CALENDAR_COLORS.YELLOW,
+  CALENDAR_COLORS.ORANGE,
+  CALENDAR_COLORS.CYAN,
+  CALENDAR_COLORS.PINK,
+  CALENDAR_COLORS.PURPLE,
+  CALENDAR_COLORS.BLUE,
+  CALENDAR_COLORS.ROSE,
+  CALENDAR_COLORS.LIME,
+  CALENDAR_COLORS.BURNT_ORANGE,
 ]
 
 const eventSchema = z.object({
@@ -181,112 +182,123 @@ export function EventModal({ week, event, onClose }: EventModalProps) {
             </p>
           </div>
 
-          {/* Form */}
-          <div className="p-4 space-y-4">
-            {/* Title */}
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 font-bold">
-                <Type className="w-4 h-4" /> Title
-              </Label>
-              <Input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Event title..."
-                className="neo-border"
-              />
-            </div>
+           {/* Form */}
+           <form className="p-4 space-y-4" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+             {/* Title */}
+             <fieldset className="space-y-2">
+               <Label htmlFor="event-title" className="flex items-center gap-2 font-bold">
+                 <Type className="w-4 h-4" /> Title
+               </Label>
+               <Input
+                 id="event-title"
+                 value={title}
+                 onChange={(e) => setTitle(e.target.value)}
+                 placeholder="Event title..."
+                 className="neo-border"
+                 required
+                 aria-required="true"
+               />
+             </fieldset>
 
-            {/* Description */}
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 font-bold">
-                <AlignLeft className="w-4 h-4" /> Description
-              </Label>
-              <Textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Describe this event..."
-                rows={3}
-                className="neo-border"
-              />
-            </div>
+             {/* Description */}
+             <fieldset className="space-y-2">
+               <Label htmlFor="event-description" className="flex items-center gap-2 font-bold">
+                 <AlignLeft className="w-4 h-4" /> Description
+               </Label>
+               <Textarea
+                 id="event-description"
+                 value={description}
+                 onChange={(e) => setDescription(e.target.value)}
+                 placeholder="Describe this event..."
+                 rows={3}
+                 className="neo-border"
+               />
+             </fieldset>
 
-            {/* Dates */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="font-bold">Start Date</Label>
-                <Input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="neo-border font-mono"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="font-bold">End Date (optional)</Label>
-                <Input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="neo-border font-mono"
-                />
-              </div>
-            </div>
+             {/* Dates */}
+             <fieldset className="grid grid-cols-2 gap-4">
+               <div className="space-y-2">
+                 <Label htmlFor="event-start-date" className="font-bold">Start Date</Label>
+                 <Input
+                   id="event-start-date"
+                   type="date"
+                   value={startDate}
+                   onChange={(e) => setStartDate(e.target.value)}
+                   className="neo-border font-mono"
+                   required
+                   aria-required="true"
+                 />
+               </div>
+               <div className="space-y-2">
+                 <Label htmlFor="event-end-date" className="font-bold">End Date (optional)</Label>
+                 <Input
+                   id="event-end-date"
+                   type="date"
+                   value={endDate}
+                   onChange={(e) => setEndDate(e.target.value)}
+                   className="neo-border font-mono"
+                 />
+               </div>
+             </fieldset>
 
-            {/* Category */}
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 font-bold">
-                <Tag className="w-4 h-4" /> Category
-              </Label>
-              <div className="flex flex-wrap gap-2">
-                 {categories.map((cat) => (
-                   <motion.button
-                     key={cat.id}
-                     whileHover={{ scale: 1.05 }}
-                     whileTap={{ scale: 0.95 }}
-                     onClick={() => setSelectedCategory(cat)}
-                     className={`px-3 py-2 neo-border font-bold text-sm transition-all ${
-                       selectedCategory.id === cat.id ? "neo-shadow" : ""
-                     }`}
-                     style={{
-                       backgroundColor: selectedCategory.id === cat.id ? cat.color : "transparent",
-                     }}
-                     aria-label={`Select ${cat.name} category`}
-                     aria-pressed={selectedCategory.id === cat.id}
-                   >
-                     {cat.name}
-                   </motion.button>
-                 ))}
-              </div>
-            </div>
+             {/* Category */}
+             <fieldset className="space-y-2">
+               <legend className="flex items-center gap-2 font-bold">
+                 <Tag className="w-4 h-4" /> Category
+               </legend>
+               <div className="flex flex-wrap gap-2">
+                  {categories.map((cat) => (
+                    <motion.button
+                      type="button"
+                      key={cat.id}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-3 py-2 neo-border font-bold text-sm transition-all ${
+                        selectedCategory.id === cat.id ? "neo-shadow" : ""
+                      }`}
+                      style={{
+                        backgroundColor: selectedCategory.id === cat.id ? cat.color : "transparent",
+                      }}
+                      aria-label={`Select ${cat.name} category`}
+                      aria-pressed={selectedCategory.id === cat.id}
+                    >
+                      {cat.name}
+                    </motion.button>
+                  ))}
+               </div>
+             </fieldset>
 
-            {/* Color */}
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 font-bold">
-                <Palette className="w-4 h-4" /> Color
-              </Label>
-              <div className="flex flex-wrap gap-2">
-                 {PRESET_COLORS.map((presetColor) => (
-                   <motion.button
-                     key={presetColor}
-                     whileHover={{ scale: 1.2, rotate: 45 }}
-                     whileTap={{ scale: 0.9 }}
-                     onClick={() => setColor(presetColor)}
-                     className={`w-10 h-10 neo-border ${
-                       color === presetColor ? "neo-shadow ring-2 ring-foreground" : ""
-                     }`}
-                     style={{ backgroundColor: presetColor }}
-                     aria-label={`Select color ${presetColor}`}
-                     aria-pressed={color === presetColor}
-                   />
-                 ))}
-              </div>
-            </div>
-          </div>
+             {/* Color */}
+             <fieldset className="space-y-2">
+               <legend className="flex items-center gap-2 font-bold">
+                 <Palette className="w-4 h-4" /> Color
+               </legend>
+               <div className="flex flex-wrap gap-2">
+                  {PRESET_COLORS.map((presetColor) => (
+                    <motion.button
+                      type="button"
+                      key={presetColor}
+                      whileHover={{ scale: 1.2, rotate: 45 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setColor(presetColor)}
+                      className={`w-10 h-10 neo-border ${
+                        color === presetColor ? "neo-shadow ring-2 ring-foreground" : ""
+                      }`}
+                      style={{ backgroundColor: presetColor }}
+                      aria-label={`Select color ${presetColor}`}
+                      aria-pressed={color === presetColor}
+                    />
+                   ))}
+               </div>
+             </fieldset>
+           </form>
 
            {/* Actions */}
            <div className="p-4 border-t-3 border-border flex gap-3">
              {event && (
                <motion.button
+                 type="button"
                  whileHover={{ scale: 1.05 }}
                  whileTap={{ scale: 0.95 }}
                  onClick={handleDelete}
@@ -298,6 +310,7 @@ export function EventModal({ week, event, onClose }: EventModalProps) {
                </motion.button>
              )}
              <motion.button
+               type="button"
                whileHover={{ scale: 1.05 }}
                whileTap={{ scale: 0.95 }}
                onClick={onClose}
@@ -307,9 +320,10 @@ export function EventModal({ week, event, onClose }: EventModalProps) {
                CANCEL
              </motion.button>
              <motion.button
+               type="submit"
+               form="event-form"
                whileHover={{ scale: 1.05, x: 4, y: -4 }}
                whileTap={{ scale: 0.95 }}
-               onClick={handleSave}
                disabled={!title.trim()}
                className="bg-accent text-accent-foreground neo-border neo-shadow px-6 py-3 font-bold flex items-center gap-2 disabled:opacity-50"
                aria-label={event ? "Update event" : "Save new event"}

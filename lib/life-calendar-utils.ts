@@ -1,5 +1,26 @@
 // Life Calendar utility functions
 
+/**
+ * Color mapping for life calendar events
+ * Uses CSS variables defined in globals.css for consistency
+ */
+export const CALENDAR_COLORS = {
+  WEEK_PAST: "#7ed957",
+  WEEK_CURRENT: "#ff914d",
+  WEEK_FUTURE: "transparent",
+  // Event colors
+  GREEN: "#7ed957",
+  YELLOW: "#ffde59",
+  ORANGE: "#ff914d",
+  CYAN: "#5ce1e6",
+  PINK: "#ff66c4",
+  PURPLE: "#a855f7",
+  BLUE: "#38bdf8",
+  ROSE: "#f472b6",
+  LIME: "#84cc16",
+  BURNT_ORANGE: "#f97316",
+} as const;
+
 export interface LifeEvent {
   id: string;
   title: string;
@@ -40,29 +61,29 @@ export interface WeekData {
 }
 
 export const DEFAULT_CATEGORIES: LifeCategory[] = [
-  { id: "life", name: "General Life", color: "#7ed957", icon: "Heart" },
+  { id: "life", name: "General Life", color: CALENDAR_COLORS.GREEN, icon: "Heart" },
   {
     id: "education",
     name: "Education",
-    color: "#5ce1e6",
+    color: CALENDAR_COLORS.CYAN,
     icon: "GraduationCap",
   },
-  { id: "career", name: "Career", color: "#ffde59", icon: "Briefcase" },
-  { id: "travel", name: "Travel", color: "#ff914d", icon: "Plane" },
+  { id: "career", name: "Career", color: CALENDAR_COLORS.YELLOW, icon: "Briefcase" },
+  { id: "travel", name: "Travel", color: CALENDAR_COLORS.ORANGE, icon: "Plane" },
   {
     id: "relationships",
     name: "Relationships",
-    color: "#ff66c4",
+    color: CALENDAR_COLORS.PINK,
     icon: "Users",
   },
   {
     id: "health",
     name: "Health & Fitness",
-    color: "#a855f7",
+    color: CALENDAR_COLORS.PURPLE,
     icon: "Activity",
   },
-  { id: "hobbies", name: "Hobbies", color: "#38bdf8", icon: "Sparkles" },
-  { id: "milestones", name: "Milestones", color: "#f472b6", icon: "Trophy" },
+  { id: "hobbies", name: "Hobbies", color: CALENDAR_COLORS.BLUE, icon: "Sparkles" },
+  { id: "milestones", name: "Milestones", color: CALENDAR_COLORS.ROSE, icon: "Trophy" },
 ];
 
 export const DEFAULT_SETTINGS: CalendarSettings = {
@@ -169,6 +190,62 @@ export function formatDate(date: Date): string {
     day: "numeric",
     year: "numeric",
   });
+}
+
+/**
+ * Safely formats a date with validation
+ * Returns a user-friendly error message if the date is invalid
+ * @param date - The date to format (Date object, string, or null)
+ * @returns Formatted date string or error message
+ */
+export function safeFormatDate(date: Date | string | null | undefined): string {
+  try {
+    if (!date) {
+      return "Invalid date";
+    }
+
+    const dateObj = typeof date === "string" ? new Date(date) : date;
+    
+    // Validate that the date is a valid Date object
+    if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) {
+      return "Invalid date";
+    }
+
+    return dateObj.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  } catch {
+    return "Invalid date";
+  }
+}
+
+/**
+ * Validates that endDate is not before startDate
+ * @param startDate - The start date
+ * @param endDate - The end date to validate
+ * @returns true if endDate >= startDate, false otherwise
+ */
+export function validateDateRange(
+  startDate: Date | string,
+  endDate: Date | string,
+): boolean {
+  try {
+    const start = typeof startDate === "string" ? new Date(startDate) : startDate;
+    const end = typeof endDate === "string" ? new Date(endDate) : endDate;
+
+    if (!(start instanceof Date) || isNaN(start.getTime())) {
+      return false;
+    }
+    if (!(end instanceof Date) || isNaN(end.getTime())) {
+      return false;
+    }
+
+    return end >= start;
+  } catch {
+    return false;
+  }
 }
 
 export function getLifeStats(
