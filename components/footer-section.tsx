@@ -1,12 +1,12 @@
 "use client"
 
 import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef, useState } from "react"
-import { ArrowRight, Calendar, Github, Twitter, Instagram } from "lucide-react"
+import { useRef } from "react"
+import { ArrowRight, Calendar, Clock, Target, Heart, Sparkles } from "lucide-react"
+import Link from "next/link"
 
 export function FooterSection() {
   const ref = useRef<HTMLDivElement>(null)
-  const [email, setEmail] = useState("")
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -16,8 +16,35 @@ export function FooterSection() {
   const y = useTransform(scrollYProgress, [0, 1], [100, 0])
   const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1])
 
+  const wisdomCards = [
+    {
+      icon: Clock,
+      title: "TIME IS YOUR MOST PRECIOUS ASSET",
+      description: "You have roughly 4,680 weeks in a lifetime. Make each one count by living intentionally and with purpose.",
+      color: "bg-primary",
+    },
+    {
+      icon: Sparkles,
+      title: "LIVE IN THE PRESENT MOMENT",
+      description: "Your life isn't about the destination. It's about the moments you're living right now. Cherish them.",
+      color: "bg-accent",
+    },
+    {
+      icon: Target,
+      title: "SET MEANINGFUL MILESTONES",
+      description: "Define what matters to you. Goals give direction to your life and transform dreams into reality.",
+      color: "bg-secondary",
+    },
+    {
+      icon: Heart,
+      title: "CONNECT WITH WHAT MATTERS",
+      description: "Your relationships, health, and passions are what make life meaningful. Invest in them.",
+      color: "bg-chart-2",
+    },
+  ]
+
   return (
-    <footer ref={ref} className="py-20 md:py-32 px-4 md:px-8 bg-foreground text-background relative overflow-hidden">
+    <footer ref={ref} className="pt-20 md:pt-32 pb-12 px-4 md:px-8 bg-foreground text-background relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="grid grid-cols-20 gap-2 h-full">
@@ -52,103 +79,94 @@ export function FooterSection() {
             Join thousands of people visualizing their life stories. Create your first calendar in seconds.
           </p>
 
-          {/* Email Signup */}
+          {/* Get Started Button */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             viewport={{ once: true }}
-            className="flex flex-col sm:flex-row gap-4 justify-center max-w-xl mx-auto"
           >
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="bg-background text-foreground neo-border neo-shadow px-6 py-4 font-mono text-lg flex-1 focus:outline-none"
-            />
-            <motion.button
-              whileHover={{ scale: 1.05, x: 8, y: -8 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-accent text-accent-foreground neo-border neo-shadow-lg px-8 py-4 font-bold text-lg flex items-center justify-center gap-2 group"
-            >
-              GET STARTED
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-            </motion.button>
+            <Link href="/calendar">
+              <motion.button
+                whileHover={{ scale: 1.05, x: 8, y: -8 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-accent text-accent-foreground neo-border neo-shadow-lg px-8 py-4 font-bold text-lg flex items-center justify-center gap-2 group mx-auto"
+              >
+                GET STARTED
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+              </motion.button>
+            </Link>
           </motion.div>
         </motion.div>
 
-        {/* Footer Links */}
-        <div className="grid md:grid-cols-4 gap-8 mb-16">
-          {/* Logo & Description */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
+        {/* Life Wisdom Section */}
+        {/* <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="mb-20"
+        >
+          <motion.h3
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
             viewport={{ once: true }}
+            className="text-2xl md:text-3xl font-bold text-center mb-12"
           >
-            <div className="flex items-center gap-2 mb-4">
-              <div className="bg-primary neo-border p-2">
-                <Calendar className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="font-bold text-xl">LIFE CALENDAR</span>
-            </div>
-            <p className="opacity-70 text-sm">Visualize your life week by week. Map your milestones and moments.</p>
-          </motion.div>
+            WISDOM FOR A MEANINGFUL LIFE
+          </motion.h3>
 
-          {/* Links */}
-          {[
-            { title: "PRODUCT", links: ["Features", "Pricing", "Examples", "Updates"] },
-            { title: "COMPANY", links: ["About", "Blog", "Careers", "Press"] },
-            { title: "SUPPORT", links: ["Help Center", "Contact", "Privacy", "Terms"] },
-          ].map((section, i) => (
-            <motion.div
-              key={section.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + i * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <h4 className="font-bold mb-4 text-secondary">{section.title}</h4>
-              <ul className="space-y-2">
-                {section.links.map((link) => (
-                  <li key={link}>
-                    <motion.a
-                      href="#"
-                      whileHover={{ x: 5 }}
-                      className="opacity-70 hover:opacity-100 transition-opacity inline-block"
-                    >
-                      {link}
-                    </motion.a>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {wisdomCards.map((card, i) => {
+              const Icon = card.icon
+              return (
+                <motion.div
+                  key={card.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + i * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -8 }}
+                  className={`${card.color} neo-border neo-shadow p-6 text-foreground`}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 10 }}
+                    className="mb-4 inline-block"
+                  >
+                    <div className="bg-foreground text-background neo-border p-3">
+                      <Icon className="w-6 h-6" />
+                    </div>
+                  </motion.div>
+
+                  <h4 className="font-bold text-sm mb-3 text-foreground leading-tight">
+                    {card.title}
+                  </h4>
+
+                  <p className="text-sm opacity-90 leading-relaxed">
+                    {card.description}
+                  </p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </motion.div> */}
 
         {/* Bottom Bar */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.6 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-background/20"
+          className="text-center pt-12 border-t border-background/20"
         >
-          <span className="opacity-70 text-sm mb-4 md:mb-0">© 2026 Life Calendar. All rights reserved.</span>
-          <div className="flex gap-4">
-            {[Github, Twitter, Instagram].map((Icon, i) => (
-              <motion.a
-                key={i}
-                href="#"
-                whileHover={{ scale: 1.2, rotate: 10, y: -5 }}
-                whileTap={{ scale: 0.9 }}
-                className="bg-background text-foreground neo-border p-3"
-              >
-                <Icon className="w-5 h-5" />
-              </motion.a>
-            ))}
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Calendar className="w-4 h-4" />
+            <span className="opacity-70 text-sm">© 2026 Life Calendar. Visualize your story.</span>
           </div>
+          <p className="opacity-50 text-xs">
+            Every week counts. Every moment matters. Make your life count.
+          </p>
         </motion.div>
       </motion.div>
     </footer>
