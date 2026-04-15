@@ -1,0 +1,25 @@
+
+> my-v0-project@0.1.0 build D:\code\life-calender
+> next build
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+   ▲ Next.js 16.0.10 (Turbopack)
+
+   Creating an optimized production build ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+ ✓ Compiled successfully in 52s
+   Running TypeScript ...
+Failed to compile.
+
+./components/hero-section.tsx:93:7
+Type error: Type 'object' is not assignable to type 'boolean | TargetAndTransition | VariantLabels | LegacyAnimationControls | undefined'.
+
+[0m [90m 91 |[39m     [33m<[39m[33mmotion[39m[33m.[39mdiv
+ [90m 92 |[39m       className[33m=[39m{[32m`absolute neo-border ${className}`[39m}
+[31m[1m>[22m[39m[90m 93 |[39m       animate[33m=[39m{animate}
+ [90m    |[39m       [31m[1m^[22m[39m
+ [90m 94 |[39m       transition[33m=[39m{{
+ [90m 95 |[39m         duration[33m:[39m [35m4[39m [33m+[39m delay[33m,[39m
+ [90m 96 |[39m         repeat[33m:[39m [33mInfinity[39m[33m,[39m[0m
+Next.js build worker exited with code: 1 and signal: null
+ ELIFECYCLE  Command failed with exit code 1.
