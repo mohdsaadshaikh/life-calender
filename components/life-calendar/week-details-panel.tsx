@@ -42,7 +42,7 @@ export function WeekDetailsPanel({ week, onClose, onAddEvent, onEditEvent }: Wee
             </p>
           </div>
           <motion.button
-            whileHover={{ scale: 1.1, rotate: 90 }}
+            whileHover={{ scale: 1.1}}
             whileTap={{ scale: 0.9 }}
             onClick={onClose}
             className="bg-card neo-border p-2"

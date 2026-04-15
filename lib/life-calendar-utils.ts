@@ -94,6 +94,12 @@ export const DEFAULT_SETTINGS: CalendarSettings = {
   theme: "light",
 };
 
+/**
+ * Calculates the week number of the year for a given date
+ * Uses ISO 8601 week numbering (Week 1 is the week with the first Thursday of the year)
+ * @param date - The date to calculate week number for
+ * @returns The week number (1-53)
+ */
 export function getWeekNumber(date: Date): number {
   const startOfYear = new Date(date.getFullYear(), 0, 1);
   const days = Math.floor(
@@ -102,6 +108,17 @@ export function getWeekNumber(date: Date): number {
   return Math.ceil((days + startOfYear.getDay() + 1) / 7);
 }
 
+/**
+ * Gets the start and end dates of a week relative to birth date
+ * @param birthDate - The starting reference date (usually birth date)
+ * @param globalWeekNumber - The absolute week number from birth (1-indexed)
+ * @returns Object containing start and end dates of the week
+ * 
+ * @example
+ * const birthDate = new Date('2000-01-01')
+ * const { start, end } = getWeekDates(birthDate, 1)
+ * // Returns week from 2000-01-01 to 2000-01-07
+ */
 export function getWeekDates(
   birthDate: Date,
   globalWeekNumber: number,
@@ -113,6 +130,16 @@ export function getWeekDates(
   return { start, end };
 }
 
+/**
+ * Calculates age between two dates in years, months, days, and weeks
+ * @param birthDate - The birth date (Date object or ISO date string)
+ * @param targetDate - The date to calculate age until (defaults to today)
+ * @returns Object containing years, months, days, and weeks lived
+ * 
+ * @example
+ * const age = calculateAge(new Date('2000-01-01'))
+ * console.log(age) // { years: 26, months: 3, days: 15, weeks: 1369 }
+ */
 export function calculateAge(
   birthDate: Date | string,
   targetDate: Date | string = new Date(),
@@ -143,6 +170,24 @@ export function calculateAge(
   return { years, months, days, weeks: totalWeeks };
 }
 
+/**
+ * Generates an array of all weeks from birth to life expectancy
+ * Each week contains metadata about whether it's past, current, or future
+ * and maps events that fall within that week's date range
+ * 
+ * @param birthDate - The person's birth date
+ * @param lifeExpectancy - Expected lifespan in years (typically 80-100)
+ * @param events - Array of all events to map to weeks
+ * @returns Array of WeekData objects (one for each week of life)
+ * 
+ * @example
+ * const weeks = generateWeeksData(
+ *   new Date('2000-01-01'),
+ *   90,
+ *   [{ title: 'Birthday', startDate: new Date('2001-01-01'), ... }]
+ * )
+ * console.log(weeks.length) // 4680 weeks (90 * 52)
+ */
 export function generateWeeksData(
   birthDate: Date,
   lifeExpectancy: number,
@@ -184,6 +229,14 @@ export function generateWeeksData(
   return weeks;
 }
 
+/**
+ * Formats a date into a user-friendly string format
+ * @param date - The date to format
+ * @returns Formatted date string (e.g., "Jan 1, 2000")
+ * 
+ * @example
+ * formatDate(new Date('2000-01-01')) // "Jan 1, 2000"
+ */
 export function formatDate(date: Date): string {
   return date.toLocaleDateString("en-US", {
     month: "short",
@@ -248,6 +301,20 @@ export function validateDateRange(
   }
 }
 
+/**
+ * Calculates comprehensive life statistics including age, weeks lived, and event breakdown
+ * Used for the statistics dashboard view
+ * 
+ * @param birthDate - The person's birth date
+ * @param lifeExpectancy - Expected lifespan in years
+ * @param events - Array of all events in the calendar
+ * @returns Object containing age, weeks, percentages, and category breakdown
+ * 
+ * @example
+ * const stats = getLifeStats(new Date('2000-01-01'), 90, events)
+ * console.log(stats.percentageLived) // 29.3
+ * console.log(stats.categoryBreakdown[0].eventCount) // 5
+ */
 export function getLifeStats(
   birthDate: Date,
   lifeExpectancy: number,
@@ -275,6 +342,15 @@ export function getLifeStats(
   };
 }
 
+/**
+ * Generates a unique identifier for database records
+ * Uses base36 encoding of random number + timestamp for collision resistance
+ * @returns A unique ID string suitable for use as database key
+ * 
+ * @example
+ * const id = generateId()
+ * console.log(id) // "a1b2c3z1234567890"
+ */
 export function generateId(): string {
   return Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
 }

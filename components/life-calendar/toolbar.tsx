@@ -68,7 +68,7 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
                   <option.icon className="w-5 h-5" />
                 </motion.button>
               </TooltipTrigger>
-              <TooltipContent className="neo-border bg-card">
+              <TooltipContent className="neo-border ">
                 <p className="font-bold">{option.label}</p>
               </TooltipContent>
             </Tooltip>
@@ -89,7 +89,7 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
             >
               <ZoomOut className="w-4 h-4" />
             </motion.button>
-            <span className="font-mono w-16 text-center neo-border bg-card px-2 py-1">
+            <span className="font-mono w-16 text-center neo-border px-2 py-1">
               {Math.round(zoomLevel * 100)}%
             </span>
             <motion.button
@@ -120,7 +120,7 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
                 <Download className="w-5 h-5" />
               </motion.button>
             </TooltipTrigger>
-            <TooltipContent className="neo-border bg-card">
+            <TooltipContent className="neo-border">
               <p className="font-bold">Export as Image (Coming Soon)</p>
             </TooltipContent>
           </Tooltip>
@@ -137,14 +137,14 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
                 <Share2 className="w-5 h-5" />
               </motion.button>
             </TooltipTrigger>
-            <TooltipContent className="neo-border bg-card">
+            <TooltipContent className="neo-border ">
               <p className="font-bold">Share</p>
             </TooltipContent>
           </Tooltip>
 
           <motion.button
-            whileHover={{ scale: 1.05, rotate: 90 }}
-            whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
             onClick={onOpenSettings}
             className="p-3 neo-border bg-accent neo-shadow"
             aria-label="Open settings"

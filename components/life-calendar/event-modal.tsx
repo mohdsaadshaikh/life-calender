@@ -159,7 +159,7 @@ export function EventModal({ week, event, onClose }: EventModalProps) {
            <div className="flex items-center justify-between p-4 border-b-3 border-border bg-primary">
              <h2 id="event-modal-title" className="text-xl font-bold">{event ? "EDIT EVENT" : "ADD EVENT"}</h2>
              <motion.button
-               whileHover={{ scale: 1.1, rotate: 90 }}
+               whileHover={{ scale: 1.1, }}
                whileTap={{ scale: 0.9 }}
                onClick={onClose}
                className="bg-card neo-border p-2"
@@ -279,7 +279,7 @@ export function EventModal({ week, event, onClose }: EventModalProps) {
                     <motion.button
                       type="button"
                       key={presetColor}
-                      whileHover={{ scale: 1.2, rotate: 45 }}
+                      whileHover={{ scale: 1.2 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setColor(presetColor)}
                       className={`w-10 h-10 neo-border ${
