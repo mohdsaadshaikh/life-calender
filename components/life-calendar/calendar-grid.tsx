@@ -106,6 +106,8 @@ export function CalendarGrid({ onWeekClick }: CalendarGridProps) {
                         hover:scale-150 hover:z-10
                       `}
                     title={`Year ${week.yearNumber}, Week ${week.weekNumber}`}
+                    aria-label={`Week ${week.weekNumber} of Year ${week.yearNumber}${week.isCurrent ? " (current)" : ""}${week.events.length > 0 ? ` (${week.events.length} event${week.events.length > 1 ? "s" : ""})`  : ""}`}
+                    aria-pressed={selectedWeek?.globalWeekNumber === week.globalWeekNumber}
                   >
                     {week.events.length > 1 && (
                       <span className="absolute -top-1 -right-1 w-3 h-3 bg-accent neo-border text-[6px] flex items-center justify-center font-bold">

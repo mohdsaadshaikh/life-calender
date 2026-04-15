@@ -62,6 +62,8 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
                   className={`p-3 neo-border transition-all ${
                     viewMode === option.id ? "bg-primary neo-shadow" : "bg-muted hover:bg-secondary"
                   }`}
+                  aria-label={option.label}
+                  aria-pressed={viewMode === option.id}
                 >
                   <option.icon className="w-5 h-5" />
                 </motion.button>
@@ -83,6 +85,7 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
               onClick={() => setZoomLevel(zoomLevel - 0.25)}
               disabled={zoomLevel <= 0.5}
               className="p-2 neo-border bg-muted hover:bg-secondary disabled:opacity-50"
+              aria-label="Zoom out"
             >
               <ZoomOut className="w-4 h-4" />
             </motion.button>
@@ -95,6 +98,7 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
               onClick={() => setZoomLevel(zoomLevel + 0.25)}
               disabled={zoomLevel >= 3}
               className="p-2 neo-border bg-muted hover:bg-secondary disabled:opacity-50"
+              aria-label="Zoom in"
             >
               <ZoomIn className="w-4 h-4" />
             </motion.button>
@@ -111,6 +115,7 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
                 onClick={handleExportImage}
                 className="p-3 neo-border bg-secondary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled
+                aria-label="Export as image (coming soon)"
               >
                 <Download className="w-5 h-5" />
               </motion.button>
@@ -127,6 +132,7 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
                 whileTap={{ scale: 0.9 }}
                 onClick={handleShare}
                 className="p-3 neo-border bg-secondary hover:bg-primary"
+                aria-label="Share calendar"
               >
                 <Share2 className="w-5 h-5" />
               </motion.button>
@@ -141,6 +147,7 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
             whileTap={{ scale: 0.95 }}
             onClick={onOpenSettings}
             className="p-3 neo-border bg-accent neo-shadow"
+            aria-label="Open settings"
           >
             <Settings className="w-5 h-5" />
           </motion.button>

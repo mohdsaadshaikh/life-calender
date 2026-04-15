@@ -86,7 +86,7 @@ export function FeaturesSection() {
               className="bg-card neo-border neo-shadow-lg p-6 md:p-8"
             >
               <motion.div
-                whileHover={{ rotate: 360, scale: 1.1 }}
+                whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.5 }}
                 className={`${feature.color} neo-border w-16 h-16 flex items-center justify-center mb-6`}
               >
@@ -102,7 +102,7 @@ export function FeaturesSection() {
                   {feature.tags.map((tag) => (
                     <motion.span
                       key={tag}
-                      whileHover={{ scale: 1.1, rotate: -2 }}
+                      whileHover={{ scale: 1.1, }}
                       className="bg-muted neo-border px-3 py-1 font-bold text-sm"
                     >
                       {tag}
@@ -130,7 +130,7 @@ export function FeaturesSection() {
                   {feature.colors.map((color) => (
                     <motion.div
                       key={color}
-                      whileHover={{ scale: 1.3, rotate: 180 }}
+                      whileHover={{ scale: 1.3,  }}
                       className="w-10 h-10 neo-border"
                       style={{ backgroundColor: color }}
                     />
@@ -160,7 +160,7 @@ export function FeaturesSection() {
                 className="text-center"
               >
                 <motion.div
-                  whileHover={{ rotate: 360, scale: 1.1 }}
+                  whileHover={{  scale: 1.1 }}
                   transition={{ duration: 0.5 }}
                   className="bg-primary neo-border w-16 h-16 mx-auto mb-4 flex items-center justify-center"
                 >

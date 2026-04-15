@@ -35,7 +35,7 @@ const EventModal = dynamic(
     import("@/components/life-calendar/event-modal").then((mod) => ({
       default: mod.EventModal,
     })),
-  { ssr: false },
+  { ssr: false, loading: () => <LoadingPlaceholder /> },
 );
 
 const SettingsPanel = dynamic(
@@ -43,7 +43,7 @@ const SettingsPanel = dynamic(
     import("@/components/life-calendar/settings-panel").then((mod) => ({
       default: mod.SettingsPanel,
     })),
-  { ssr: false },
+  { ssr: false, loading: () => <LoadingPlaceholder /> },
 );
 
 const WeekDetailsPanel = dynamic(
@@ -51,7 +51,7 @@ const WeekDetailsPanel = dynamic(
     import("@/components/life-calendar/week-details-panel").then((mod) => ({
       default: mod.WeekDetailsPanel,
     })),
-  { ssr: false },
+  { ssr: false, loading: () => <LoadingPlaceholder /> },
 );
 
 const OnboardingModal = dynamic(
@@ -59,7 +59,7 @@ const OnboardingModal = dynamic(
     import("@/components/life-calendar/onboarding-modal").then((mod) => ({
       default: mod.OnboardingModal,
     })),
-  { ssr: false },
+  { ssr: false, loading: () => <LoadingPlaceholder /> },
 );
 
 function LoadingPlaceholder() {
@@ -163,104 +163,106 @@ export default function CalendarPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background relative">
-      <BuyMeCoffeeButton />
+    <ErrorBoundary>
+      <main className="min-h-screen bg-background relative">
+        <BuyMeCoffeeButton />
 
-      {/* Header */}
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className="sticky top-0 z-30 bg-card neo-border-thick px-4 py-4"
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/">
-              <motion.button
-                whileHover={{ scale: 1.1, x: -4 }}
-                whileTap={{ scale: 0.9 }}
-                className="bg-muted neo-border p-2"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </motion.button>
-            </Link>
-            <div className="flex items-center gap-2">
-              <div className="bg-primary neo-border p-2">
-                <Calendar className="w-5 h-5 text-primary-foreground" />
+        {/* Header */}
+        <motion.header
+          initial={{ y: -100 }}
+          animate={{ y: 0 }}
+          className="sticky top-0 z-30 bg-card neo-border-thick px-4 py-4"
+        >
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link href="/">
+                <motion.button
+                  whileHover={{ scale: 1.1, x: -4 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="bg-muted neo-border p-2"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </motion.button>
+              </Link>
+              <div className="flex items-center gap-2">
+                <div className="bg-primary neo-border p-2">
+                  <Calendar className="w-5 h-5 text-primary-foreground" />
+                </div>
+                <span className="font-bold text-lg md:text-xl">
+                  MY LIFE CALENDAR
+                </span>
               </div>
-              <span className="font-bold text-lg md:text-xl">
-                MY LIFE CALENDAR
-              </span>
             </div>
           </div>
+        </motion.header>
+
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-6 lg:grid lg:grid-cols-[300px_1fr] lg:gap-8 lg:items-start">
+          {/* Calendar Switcher Sidebar */}
+          <div className="lg:sticky lg:top-20">
+            <CalendarSwitcher />
+          </div>
+
+          {/* Calendar View */}
+          <div className="space-y-6">
+            {/* Toolbar */}
+            <Toolbar onOpenSettings={() => setShowSettings(true)} />
+
+            {/* View Content */}
+            <motion.div
+              key={viewMode}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="calendar-export-area"
+            >
+              <Suspense fallback={<LoadingPlaceholder />}>
+                {viewMode === "grid" && (
+                  <CalendarGrid onWeekClick={handleWeekClick} />
+                )}
+                {viewMode === "timeline" && (
+                  <TimelineView onWeekClick={handleWeekClick} />
+                )}
+                {viewMode === "stats" && <StatsDashboard />}
+              </Suspense>
+            </motion.div>
+          </div>
         </div>
-      </motion.header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-6 lg:grid lg:grid-cols-[300px_1fr] lg:gap-8 lg:items-start">
-        {/* Calendar Switcher Sidebar */}
-        <div className="lg:sticky lg:top-20">
-          <CalendarSwitcher />
-        </div>
+        {/* Panels and Modals */}
+        <AnimatePresence>
+          {showOnboarding && (
+            <OnboardingModal onComplete={() => setShowOnboarding(false)} />
+          )}
+        </AnimatePresence>
 
-        {/* Calendar View */}
-        <div className="space-y-6">
-          {/* Toolbar */}
-          <Toolbar onOpenSettings={() => setShowSettings(true)} />
+        <AnimatePresence>
+          {showSettings && (
+            <SettingsPanel onClose={() => setShowSettings(false)} />
+          )}
+        </AnimatePresence>
 
-          {/* View Content */}
-          <motion.div
-            key={viewMode}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="calendar-export-area"
-          >
-            <Suspense fallback={<LoadingPlaceholder />}>
-              {viewMode === "grid" && (
-                <CalendarGrid onWeekClick={handleWeekClick} />
-              )}
-              {viewMode === "timeline" && (
-                <TimelineView onWeekClick={handleWeekClick} />
-              )}
-              {viewMode === "stats" && <StatsDashboard />}
-            </Suspense>
-          </motion.div>
-        </div>
-      </div>
+        <AnimatePresence>
+          {selectedWeek && !showEventModal && (
+            <WeekDetailsPanel
+              week={selectedWeek}
+              onClose={() => setSelectedWeek(null)}
+              onAddEvent={handleAddEvent}
+              onEditEvent={handleEditEvent}
+            />
+          )}
+        </AnimatePresence>
 
-      {/* Panels and Modals */}
-      <AnimatePresence>
-        {showOnboarding && (
-          <OnboardingModal onComplete={() => setShowOnboarding(false)} />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {showSettings && (
-          <SettingsPanel onClose={() => setShowSettings(false)} />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {selectedWeek && !showEventModal && (
-          <WeekDetailsPanel
-            week={selectedWeek}
-            onClose={() => setSelectedWeek(null)}
-            onAddEvent={handleAddEvent}
-            onEditEvent={handleEditEvent}
-          />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {showEventModal && (
-          <EventModal
-            week={selectedWeek}
-            event={editingEvent}
-            onClose={handleCloseEventModal}
-          />
-        )}
-      </AnimatePresence>
-    </main>
+        <AnimatePresence>
+          {showEventModal && (
+            <EventModal
+              week={selectedWeek}
+              event={editingEvent}
+              onClose={handleCloseEventModal}
+            />
+          )}
+        </AnimatePresence>
+      </main>
+    </ErrorBoundary>
   );
 }

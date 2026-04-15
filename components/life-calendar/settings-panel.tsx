@@ -109,24 +109,28 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 300 }}
       className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-card neo-border-thick z-50 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="settings-panel-title"
     >
-      {/* Header */}
-      <div className="sticky top-0 bg-secondary p-4 border-b-3 border-border flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="bg-card neo-border p-2">
-            <Settings className="w-5 h-5" />
-          </div>
-          <h2 className="text-xl font-bold">SETTINGS</h2>
-        </div>
-        <motion.button
-          whileHover={{ scale: 1.1, rotate: 90 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={onClose}
-          className="bg-card neo-border neo-shadow px-4 py-2 font-bold"
-        >
-          CLOSE
-        </motion.button>
-      </div>
+       {/* Header */}
+       <div className="sticky top-0 bg-secondary p-4 border-b-3 border-border flex items-center justify-between">
+         <div className="flex items-center gap-3">
+           <div className="bg-card neo-border p-2">
+             <Settings className="w-5 h-5" />
+           </div>
+           <h2 id="settings-panel-title" className="text-xl font-bold">SETTINGS</h2>
+         </div>
+         <motion.button
+           whileHover={{ scale: 1.1, rotate: 90 }}
+           whileTap={{ scale: 0.9 }}
+           onClick={onClose}
+           className="bg-card neo-border neo-shadow px-4 py-2 font-bold"
+           aria-label="Close settings panel"
+         >
+           CLOSE
+         </motion.button>
+       </div>
 
       <div className="p-6 space-y-8">
         {/* Birth Date */}
@@ -181,27 +185,34 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
         >
           <Label className="font-bold text-lg">DATA MANAGEMENT</Label>
           <div className="space-y-3">
-            <motion.button
-              whileHover={{ scale: 1.02, x: 4 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleExport}
-              className="w-full bg-primary neo-border neo-shadow p-4 font-bold flex items-center justify-center gap-3"
-            >
-              <Download className="w-5 h-5" />
-              EXPORT BACKUP
-            </motion.button>
+             <motion.button
+               whileHover={{ scale: 1.02, x: 4 }}
+               whileTap={{ scale: 0.98 }}
+               onClick={handleExport}
+               className="w-full bg-primary neo-border neo-shadow p-4 font-bold flex items-center justify-center gap-3"
+               aria-label="Export calendar data as JSON backup"
+             >
+               <Download className="w-5 h-5" />
+               EXPORT BACKUP
+             </motion.button>
 
-            <label className="block">
-              <motion.div
-                whileHover={{ scale: 1.02, x: 4 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full bg-secondary neo-border neo-shadow p-4 font-bold flex items-center justify-center gap-3 cursor-pointer"
-              >
-                <Upload className="w-5 h-5" />
-                IMPORT BACKUP
-              </motion.div>
-              <input type="file" accept=".json" onChange={handleImport} className="hidden" />
-            </label>
+             <label className="block">
+               <motion.div
+                 whileHover={{ scale: 1.02, x: 4 }}
+                 whileTap={{ scale: 0.98 }}
+                 className="w-full bg-secondary neo-border neo-shadow p-4 font-bold flex items-center justify-center gap-3 cursor-pointer"
+               >
+                 <Upload className="w-5 h-5" />
+                 IMPORT BACKUP
+               </motion.div>
+               <input 
+                 type="file" 
+                 accept=".json" 
+                 onChange={handleImport} 
+                 className="hidden" 
+                 aria-label="Upload calendar data from JSON backup file"
+               />
+             </label>
           </div>
         </motion.div>
 

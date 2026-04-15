@@ -27,7 +27,7 @@ export function FloatingElements() {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {shapes.map((shape, i) => (
+      {/* {shapes.map((shape, i) => (
         <motion.div
           key={i}
           className={`absolute ${shape.color} ${shape.size} neo-border`}
@@ -46,10 +46,10 @@ export function FloatingElements() {
             delay: i * 0.8,
           }}
         />
-      ))}
+      ))} */}
 
       {/* Parallax scrolling shapes - simplified */}
-      <motion.div
+      {/* <motion.div
         className="absolute w-16 h-16 md:w-24 md:h-24 bg-primary/15 neo-border"
         style={{
           left: "12%",
@@ -57,7 +57,7 @@ export function FloatingElements() {
           y: yTransform1,
           rotate: rotateTransform1,
         }}
-      />
+      /> */}
       <motion.div
         className="absolute w-12 h-12 md:w-20 md:h-20 bg-secondary/15 neo-border"
         style={{
@@ -70,7 +70,7 @@ export function FloatingElements() {
       <motion.div
         className="absolute w-10 h-10 md:w-16 md:h-16 bg-accent/15 neo-border"
         style={{
-          left: "22%",
+          left: "40%",
           top: "65%",
           y: yTransform3,
         }}

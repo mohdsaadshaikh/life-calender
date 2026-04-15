@@ -241,7 +241,7 @@ export function HeroSection() {
             </motion.div>
 
             {/* Decorative floating shapes */}
-            <FloatingShape
+            {/* <FloatingShape
               className="w-12 h-12 md:w-16 md:h-16 bg-secondary -top-6 -right-6"
               animate={{ y: [-5, 5], rotate: [0, 10, 0] }}
               delay={0}
@@ -255,7 +255,7 @@ export function HeroSection() {
               className="w-10 h-10 md:w-14 md:h-14 bg-accent -top-4 -left-4"
               animate={{ x: [-5, 5], rotate: [0, 20, 0] }}
               delay={1}
-            />
+            /> */}
 
             {/* Stats badge */}
             <motion.div

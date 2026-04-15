@@ -18,7 +18,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto">
         <div className="bg-card neo-border neo-shadow flex items-center justify-between px-4 py-3 md:px-6">
           <Link href="/">
-            <motion.div whileHover={{ scale: 1.05, rotate: -2 }} className="flex items-center gap-2">
+            <motion.div whileHover={{ scale: 1.1, }} className="flex items-center gap-2">
               <div className="bg-primary neo-border p-2">
                 <Calendar className="w-5 h-5 text-primary-foreground" />
               </div>
