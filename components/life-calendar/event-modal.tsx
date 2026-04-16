@@ -182,8 +182,8 @@ export function EventModal({ week, event, onClose }: EventModalProps) {
             </p>
           </div>
 
-           {/* Form */}
-           <form className="p-4 space-y-4" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+            {/* Form */}
+            <form id="event-form" className="p-4 space-y-4" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
              {/* Title */}
              <fieldset className="space-y-2">
                <Label htmlFor="event-title" className="flex items-center gap-2 font-bold">
