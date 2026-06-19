@@ -4,8 +4,6 @@ import { FeaturesSection } from "@/components/features-section"
 import { QuoteSection } from "@/components/quote-section"
 import { FooterSection } from "@/components/footer-section"
 import { Navbar } from "@/components/navbar"
-import { FloatingElements } from "@/components/floating-elements"
-
 export default function Home() {
   return (
     <main className="relative overflow-x-hidden horizons-bg min-h-screen">
