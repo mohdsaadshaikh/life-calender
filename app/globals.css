@@ -4,95 +4,96 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Neobrutalism Color Palette */
-  --background: oklch(0.98 0.01 90);
-  --foreground: oklch(0.1 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.1 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.1 0 0);
-  --primary: oklch(0.75 0.2 145);
-  --primary-foreground: oklch(0.1 0 0);
-  --secondary: oklch(0.85 0.18 85);
-  --secondary-foreground: oklch(0.1 0 0);
-  --muted: oklch(0.95 0.01 90);
-  --muted-foreground: oklch(0.4 0 0);
-  --accent: oklch(0.7 0.2 30);
-  --accent-foreground: oklch(0.1 0 0);
-  --destructive: oklch(0.65 0.25 25);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.1 0 0);
-  --input: oklch(0.1 0 0);
-  --ring: oklch(0.1 0 0);
-  --chart-1: oklch(0.75 0.2 145);
-  --chart-2: oklch(0.85 0.18 85);
-  --chart-3: oklch(0.7 0.2 30);
-  --chart-4: oklch(0.7 0.2 250);
-  --chart-5: oklch(0.8 0.15 320);
-  --radius: 0px;
-  --sidebar: oklch(0.98 0.01 90);
-  --sidebar-foreground: oklch(0.1 0 0);
-  --sidebar-primary: oklch(0.75 0.2 145);
-  --sidebar-primary-foreground: oklch(0.1 0 0);
-  --sidebar-accent: oklch(0.95 0.01 90);
-  --sidebar-accent-foreground: oklch(0.1 0 0);
-  --sidebar-border: oklch(0.1 0 0);
-  --sidebar-ring: oklch(0.1 0 0);
+  /* Neobrutalism Color Palette matching screenshot */
+  --background: #FAF5E6;
+  --foreground: #000000;
+  --card: #FFFFFF;
+  --card-foreground: #000000;
+  --popover: #FFFFFF;
+  --popover-foreground: #000000;
+  --primary: #FF9100;
+  /* Vibrant Orange */
+  --primary-foreground: #000000;
+  --secondary: #FF5B87;
+  /* Vibrant Pink */
+  --secondary-foreground: #000000;
+  --muted: #EADEC9;
+  /* Cream/darker beige grid lines */
+  --muted-foreground: #555555;
+  --accent: #52D167;
+  /* Vibrant Purple */
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #000000;
+  --input: #FFFFFF;
+  --ring: #000000;
+  --chart-1: #FF9100;
+  --chart-2: #FF5B87;
+  --chart-3: #8A79FF;
+  --chart-4: #254ACF;
+  --chart-5: #3B82F6;
+  --radius: 20px;
+  --sidebar: #FAF5E6;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #FF9100;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #EADEC9;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #000000;
+  --sidebar-ring: #000000;
 
   /* Life Calendar Color Scheme */
-  --week-past: #7ed957;
-  --week-current: #ff914d;
+  --week-past: #52D167;
+  /* Vibrant Green */
+  --week-current: #FF9100;
+  /* Vibrant Orange */
   --week-future: transparent;
-  --event-green: #7ed957;
-  --event-yellow: #ffde59;
-  --event-orange: #ff914d;
-  --event-cyan: #5ce1e6;
-  --event-pink: #ff66c4;
-  --event-purple: #a855f7;
-  --event-blue: #38bdf8;
-  --event-rose: #f472b6;
-  --event-lime: #84cc16;
-  --event-burnt-orange: #f97316;
+  --event-green: #52D167;
+  --event-yellow: #FFD43B;
+  --event-orange: #FF9100;
+  --event-cyan: #22B8CF;
+  --event-pink: #FF5B87;
+  --event-purple: #8A79FF;
+  --event-blue: #339AF0;
+  --event-rose: #FF6B6B;
+  --event-lime: #94D82D;
+  --event-burnt-orange: #FF922B;
 }
 
 .dark {
-  --background: oklch(0.15 0 0);
-  --foreground: oklch(0.98 0 0);
-  --card: oklch(0.2 0 0);
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.2 0 0);
-  --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.75 0.2 145);
-  --primary-foreground: oklch(0.1 0 0);
-  --secondary: oklch(0.85 0.18 85);
-  --secondary-foreground: oklch(0.1 0 0);
-  --muted: oklch(0.25 0 0);
-  --muted-foreground: oklch(0.7 0 0);
-  --accent: oklch(0.7 0.2 30);
-  --accent-foreground: oklch(0.1 0 0);
-  --destructive: oklch(0.65 0.25 25);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.98 0 0);
-  --input: oklch(0.98 0 0);
-  --ring: oklch(0.98 0 0);
-  --chart-1: oklch(0.75 0.2 145);
-  --chart-2: oklch(0.85 0.18 85);
-  --chart-3: oklch(0.7 0.2 30);
-  --chart-4: oklch(0.7 0.2 250);
-  --chart-5: oklch(0.8 0.15 320);
-  --sidebar: oklch(0.2 0 0);
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.75 0.2 145);
-  --sidebar-primary-foreground: oklch(0.1 0 0);
-  --sidebar-accent: oklch(0.25 0 0);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.98 0 0);
-  --sidebar-ring: oklch(0.98 0 0);
+  --background: #121212;
+  --foreground: #FAF5E6;
+  --card: #1C1C1C;
+  --card-foreground: #FAF5E6;
+  --popover: #1C1C1C;
+  --popover-foreground: #FAF5E6;
+  --primary: #FF9100;
+  --primary-foreground: #121212;
+  --secondary: #FF5B87;
+  --secondary-foreground: #121212;
+  --muted: #2A2A2A;
+  --muted-foreground: #A0A0A0;
+  --accent: #52D167;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #FAF5E6;
+  --input: #1C1C1C;
+  --ring: #FAF5E6;
+  --sidebar: #1C1C1C;
+  --sidebar-foreground: #FAF5E6;
+  --sidebar-primary: #FF9100;
+  --sidebar-primary-foreground: #121212;
+  --sidebar-accent: #2A2A2A;
+  --sidebar-accent-foreground: #FAF5E6;
+  --sidebar-border: #FAF5E6;
+  --sidebar-ring: #FAF5E6;
 }
 
 @theme inline {
-  --font-sans: "Space Grotesk", "Space Grotesk Fallback", sans-serif;
-  --font-mono: "Space Mono", "Space Mono Fallback", monospace;
+  --font-sans: "Outfit", "Space Grotesk", sans-serif;
+  --font-mono: "Space Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -117,10 +118,10 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius));
-  --radius-md: calc(var(--radius));
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius));
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -135,30 +136,72 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
-/* Custom Neobrutalism Utilities */
-.neo-shadow {
-  box-shadow: 4px 4px 0px 0px oklch(0.1 0 0);
-}
-
-.neo-shadow-lg {
-  box-shadow: 8px 8px 0px 0px oklch(0.1 0 0);
-}
-
-.neo-shadow-xl {
-  box-shadow: 12px 12px 0px 0px oklch(0.1 0 0);
-}
-
+/* Custom Neobrutalism Utilities (Matching the Screenshot style) */
 .neo-border {
-  border: 3px solid oklch(0.1 0 0);
+  border: 3px solid #000000;
+  border-radius: 20px;
 }
 
 .neo-border-thick {
-  border: 4px solid oklch(0.1 0 0);
+  border: 4px solid #000000;
+  border-radius: 24px;
+}
+
+.neo-shadow {
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.neo-shadow-lg {
+  box-shadow: 6px 6px 0px 0px #000000;
+}
+
+.neo-shadow-xl {
+  box-shadow: 8px 8px 0px 0px #000000;
+}
+
+/* Custom Outlined Logo styles from screenshot */
+.horizons-logo-text {
+  font-family: 'Fredoka', 'Outfit', sans-serif;
+  font-weight: 800;
+  color: #FFFFFF;
+  -webkit-text-stroke: 3.5px #000000;
+  text-shadow: 4px 4px 0px #000000;
+}
+
+.horizons-logo-sub {
+  font-family: 'Fredoka', 'Outfit', sans-serif;
+  font-weight: 800;
+  color: #000000;
+  letter-spacing: 0.1em;
+}
+
+/* Custom Square Grid Background Pattern */
+.horizons-bg {
+  background-color: #FAF5E6;
+  background-image:
+    linear-gradient(to right, #EADEC9 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, #EADEC9 1.5px, transparent 1.5px);
+  background-size: 64px 64px;
+  background-repeat: repeat;
+}
+
+/* Grid Patterns for Cards */
+.card-grid-orange {
+  background: #FF9100;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-grid-green {
+  background: #52D167;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Smooth scrolling */
@@ -172,15 +215,16 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: oklch(0.95 0.01 90);
-  border-left: 3px solid oklch(0.1 0 0);
+  background: #EFE8D8;
+  border-left: 3px solid #000000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: oklch(0.75 0.2 145);
-  border: 3px solid oklch(0.1 0 0);
+  background: #F59E0B;
+  border: 3px solid #000000;
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.85 0.18 85);
+  background: #EC4899;
 }

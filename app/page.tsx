@@ -8,8 +8,7 @@ import { FloatingElements } from "@/components/floating-elements"
 
 export default function Home() {
   return (
-    <main className="relative overflow-x-hidden">
-      <FloatingElements />
+    <main className="relative overflow-x-hidden horizons-bg min-h-screen">
       <Navbar />
       <HeroSection />
       <ExamplesSection />

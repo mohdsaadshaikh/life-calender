@@ -43,7 +43,7 @@ export function Navbar() {
               <motion.button
                 whileHover={{ scale: 1.05, x: 4, y: -4 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-accent text-accent-foreground neo-border neo-shadow px-6 py-2 font-bold"
+                className="bg-primary text-primary-foreground neo-border neo-shadow px-6 py-2 font-bold hover:bg-secondary hover:text-secondary-foreground transition-colors"
               >
                 GET STARTED
               </motion.button>
@@ -78,7 +78,7 @@ export function Navbar() {
               </a>
             ))}
             <Link href="/calendar" onClick={() => setIsOpen(false)}>
-              <button className="w-full bg-accent text-accent-foreground neo-border neo-shadow px-6 py-3 font-bold mt-2">
+              <button className="w-full bg-primary text-primary-foreground neo-border neo-shadow px-6 py-3 font-bold mt-2 hover:bg-secondary hover:text-secondary-foreground transition-colors">
                 GET STARTED
               </button>
             </Link>

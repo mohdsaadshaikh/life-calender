@@ -187,6 +187,39 @@ export const useLifeCalendarStore = create<LifeCalendarState>()(
     }),
     {
       name: "life-calendar-storage",
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        if (version === 0 || !version) {
+          const migratedState = { ...persistedState };
+          migratedState.categories = DEFAULT_CATEGORIES;
+          
+          const categoryMapping: Record<string, string> = {
+            life: "life",
+            education: "career",
+            career: "career",
+            travel: "milestones",
+            relationships: "relationships",
+            health: "life",
+            hobbies: "life",
+            milestones: "milestones",
+          };
+
+          if (migratedState.events) {
+            migratedState.events = migratedState.events.map((event: any) => {
+              const oldCatId = event.category?.id || "life";
+              const newCatId = categoryMapping[oldCatId] || "life";
+              const newCategory = DEFAULT_CATEGORIES.find(c => c.id === newCatId) || DEFAULT_CATEGORIES[0];
+              return {
+                ...event,
+                category: newCategory,
+                color: newCategory.color,
+              };
+            });
+          }
+          return migratedState;
+        }
+        return persistedState;
+      },
       partialize: (state) => ({
         calendars: state.calendars,
         activeCalendarId: state.activeCalendarId,

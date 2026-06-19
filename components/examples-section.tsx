@@ -97,7 +97,7 @@ export function ExamplesSection() {
                   <div className={`${example.color} neo-border neo-shadow-xl p-6 md:p-8`}>
                     <div className="grid md:grid-cols-2 gap-8 items-center">
                       {/* Calendar Preview */}
-                      <div className="bg-card neo-border p-4 md:p-6">
+                      <div className="bg-muted neo-border p-4 md:p-6">
                         <div className="grid grid-cols-26 gap-[2px] md:gap-1">
                           {Array.from({ length: 260 }).map((_, j) => (
                             <motion.div
@@ -106,9 +106,8 @@ export function ExamplesSection() {
                               whileInView={{ scale: 1 }}
                               transition={{ delay: j * 0.002 }}
                               viewport={{ once: true }}
-                              className={`aspect-square neo-border ${
-                                j < Math.floor(Math.random() * 150 + 50) ? example.color : "bg-muted"
-                              }`}
+                              className={`aspect-square neo-border ${j < Math.floor(Math.random() * 150 + 50) ? example.color : "bg-muted"
+                                }`}
                               style={{ minWidth: "6px", minHeight: "6px" }}
                             />
                           ))}

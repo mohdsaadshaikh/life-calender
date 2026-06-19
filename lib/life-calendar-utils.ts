@@ -5,20 +5,20 @@
  * Uses CSS variables defined in globals.css for consistency
  */
 export const CALENDAR_COLORS = {
-  WEEK_PAST: "#7ed957",
-  WEEK_CURRENT: "#ff914d",
+  WEEK_PAST: "#52D167",
+  WEEK_CURRENT: "#FF9100",
   WEEK_FUTURE: "transparent",
-  // Event colors
-  GREEN: "#7ed957",
-  YELLOW: "#ffde59",
-  ORANGE: "#ff914d",
-  CYAN: "#5ce1e6",
-  PINK: "#ff66c4",
-  PURPLE: "#a855f7",
-  BLUE: "#38bdf8",
-  ROSE: "#f472b6",
-  LIME: "#84cc16",
-  BURNT_ORANGE: "#f97316",
+  // Event colors matching brand palette
+  GREEN: "#52D167",
+  YELLOW: "#FFD43B",
+  ORANGE: "#FF9100",
+  CYAN: "#22B8CF",
+  PINK: "#FF5B87",
+  PURPLE: "#8A79FF",
+  BLUE: "#254ACF",
+  ROSE: "#FF6B6B",
+  LIME: "#94D82D",
+  BURNT_ORANGE: "#FF922B",
 } as const;
 
 export interface LifeEvent {
@@ -62,28 +62,9 @@ export interface WeekData {
 
 export const DEFAULT_CATEGORIES: LifeCategory[] = [
   { id: "life", name: "General Life", color: CALENDAR_COLORS.GREEN, icon: "Heart" },
-  {
-    id: "education",
-    name: "Education",
-    color: CALENDAR_COLORS.CYAN,
-    icon: "GraduationCap",
-  },
-  { id: "career", name: "Career", color: CALENDAR_COLORS.YELLOW, icon: "Briefcase" },
-  { id: "travel", name: "Travel", color: CALENDAR_COLORS.ORANGE, icon: "Plane" },
-  {
-    id: "relationships",
-    name: "Relationships",
-    color: CALENDAR_COLORS.PINK,
-    icon: "Users",
-  },
-  {
-    id: "health",
-    name: "Health & Fitness",
-    color: CALENDAR_COLORS.PURPLE,
-    icon: "Activity",
-  },
-  { id: "hobbies", name: "Hobbies", color: CALENDAR_COLORS.BLUE, icon: "Sparkles" },
-  { id: "milestones", name: "Milestones", color: CALENDAR_COLORS.ROSE, icon: "Trophy" },
+  { id: "career", name: "Work & Career", color: CALENDAR_COLORS.ORANGE, icon: "Briefcase" },
+  { id: "relationships", name: "Relationships", color: CALENDAR_COLORS.PINK, icon: "Users" },
+  { id: "milestones", name: "Milestones", color: CALENDAR_COLORS.BLUE, icon: "Trophy" },
 ];
 
 export const DEFAULT_SETTINGS: CalendarSettings = {
@@ -258,7 +239,7 @@ export function safeFormatDate(date: Date | string | null | undefined): string {
     }
 
     const dateObj = typeof date === "string" ? new Date(date) : date;
-    
+
     // Validate that the date is a valid Date object
     if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) {
       return "Invalid date";

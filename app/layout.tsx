@@ -1,12 +1,17 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Space_Grotesk, Space_Mono } from "next/font/google";
+import { Outfit, Fredoka, Space_Mono } from "next/font/google";
 // import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const fredoka = Fredoka({
+  subsets: ["latin"],
+  variable: "--font-display",
 });
 
 const spaceMono = Space_Mono({
@@ -30,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${spaceGrotesk.variable} ${spaceMono.variable} font-sans antialiased`}
+        className={`${outfit.variable} ${fredoka.variable} ${spaceMono.variable} font-sans antialiased`}
       >
         {children}
         {/* <Analytics /> */}

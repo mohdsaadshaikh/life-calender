@@ -14,11 +14,11 @@ import Link from "next/link";
 
 function AnimatedCalendarGrid() {
   const colors = [
-    "#7ed957",
-    "#ffde59",
-    "#ff914d",
-    "#5ce1e6",
-    "#ff66c4",
+    "#FF9100", // Brand Orange
+    "#FF5B87", // Brand Pink
+    "#254ACF", // Brand Purple
+    "#52D167", // Brand Green
+    "#FFFDF5", // Brand Cream
     "#ffffff",
   ];
 
@@ -156,7 +156,7 @@ export function HeroSection() {
                 VISUAL
               </span>
               <br />
-              <span className="text-accent">JOURNEY</span>
+              <span className="text-chart-4">JOURNEY</span>
             </motion.h1>
 
             <motion.p
@@ -201,7 +201,7 @@ export function HeroSection() {
                 <motion.button
                   whileHover={{ scale: 1.05, x: 8, y: -8 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-accent text-accent-foreground neo-border neo-shadow-lg px-8 py-4 font-bold text-lg flex items-center justify-center gap-2 group"
+                  className="bg-primary text-primary-foreground neo-border neo-shadow-lg px-8 py-4 font-bold text-lg flex items-center justify-center gap-2 group"
                 >
                   START YOUR CALENDAR
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />

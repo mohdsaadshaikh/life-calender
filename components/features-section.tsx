@@ -24,7 +24,7 @@ const features = [
     title: "CUSTOMIZE",
     description: "Color-code and label your events to categorize different experiences.",
     color: "bg-accent",
-    colors: ["#7ed957", "#ffde59", "#ff914d", "#5ce1e6", "#ff66c4"],
+    colors: ["#FF9100", "#FF5B87", "#254ACF", "#52D167", "#22B8CF"],
   },
 ]
 
@@ -46,7 +46,7 @@ export function FeaturesSection() {
   const rotate = useTransform(scrollYProgress, [0, 1], [10, -10])
 
   return (
-    <section ref={ref} id="features" className="py-20 md:py-32 px-4 md:px-8 relative overflow-hidden bg-muted">
+    <section ref={ref} id="features" className="py-20 md:py-32 px-4 md:px-8 relative overflow-hidden bg-foreground">
       {/* Parallax Background */}
       <motion.div
         style={{ y: y1, rotate }}
@@ -65,11 +65,11 @@ export function FeaturesSection() {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <span className="bg-primary text-primary-foreground neo-border neo-shadow px-4 py-2 font-bold inline-block mb-6">
+          {/* <span className="bg-primary text-primary-foreground neo-border neo-shadow px-4 py-2 font-bold inline-block mb-6">
             FEATURES
-          </span>
+          </span> */}
           <h2 className="text-4xl md:text-6xl font-bold">
-            POWERFUL <span className="bg-secondary neo-border px-4 inline-block transform -rotate-2">TOOLS</span>
+            <span className="text-muted">POWERFUL</span> <span className="bg-secondary neo-border px-4 inline-block transform -rotate-2">TOOLS</span>
           </h2>
         </motion.div>
 
@@ -83,7 +83,7 @@ export function FeaturesSection() {
               transition={{ duration: 0.6, delay: i * 0.2 }}
               viewport={{ once: true }}
               whileHover={{ y: -10, rotate: i % 2 === 0 ? 2 : -2 }}
-              className="bg-card neo-border neo-shadow-lg p-6 md:p-8"
+              className="bg-muted neo-border neo-shadow-lg p-6 md:p-8"
             >
               <motion.div
                 whileHover={{ scale: 1.1 }}
@@ -130,7 +130,7 @@ export function FeaturesSection() {
                   {feature.colors.map((color) => (
                     <motion.div
                       key={color}
-                      whileHover={{ scale: 1.3,  }}
+                      whileHover={{ scale: 1.3, }}
                       className="w-10 h-10 neo-border"
                       style={{ backgroundColor: color }}
                     />
@@ -142,7 +142,7 @@ export function FeaturesSection() {
         </div>
 
         {/* Stats */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
@@ -160,7 +160,7 @@ export function FeaturesSection() {
                 className="text-center"
               >
                 <motion.div
-                  whileHover={{  scale: 1.1 }}
+                  whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.5 }}
                   className="bg-primary neo-border w-16 h-16 mx-auto mb-4 flex items-center justify-center"
                 >
@@ -179,7 +179,7 @@ export function FeaturesSection() {
               </motion.div>
             ))}
           </div>
-        </motion.div>
+        </motion.div> */}
       </div>
     </section>
   )
