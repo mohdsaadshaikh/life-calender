@@ -39,11 +39,11 @@ export function Navbar() {
                 {item}
               </motion.a>
             ))}
-            <Link href="/calendar">
+            <Link href="/signin">
               <motion.button
                 whileHover={{ scale: 1.05, x: 4, y: -4 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-primary text-primary-foreground neo-border neo-shadow px-6 py-2 font-bold hover:bg-secondary hover:text-secondary-foreground transition-colors"
+                className="bg-primary text-primary-foreground neo-border neo-shadow px-6 py-2 font-bold hover:bg-secondary hover:text-secondary-foreground transition-colors cursor-pointer"
               >
                 GET STARTED
               </motion.button>
@@ -77,8 +77,8 @@ export function Navbar() {
                 {item}
               </a>
             ))}
-            <Link href="/calendar" onClick={() => setIsOpen(false)}>
-              <button className="w-full bg-primary text-primary-foreground neo-border neo-shadow px-6 py-3 font-bold mt-2 hover:bg-secondary hover:text-secondary-foreground transition-colors">
+            <Link href="/signin" onClick={() => setIsOpen(false)}>
+              <button className="w-full bg-primary text-primary-foreground neo-border neo-shadow px-6 py-3 font-bold mt-2 hover:bg-secondary hover:text-secondary-foreground transition-colors cursor-pointer">
                 GET STARTED
               </button>
             </Link>
