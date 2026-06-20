@@ -1,8 +1,10 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  images: {
-    unoptimized: true,
-  },
+const nextConfig = {};
+
+if (process.env.NODE_ENV !== "production") {
+  const { initOpenNextCloudflareForDev } = await import(
+    "@opennextjs/cloudflare"
+  );
+  initOpenNextCloudflareForDev();
 }
 
-export default nextConfig
+export default nextConfig;
