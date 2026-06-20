@@ -11,7 +11,7 @@
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "cloudflare-build": "opennextjs-cloudflare build",
+    "cloudflare-build": "opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion",
     "preview": "npm run cloudflare-build && opennextjs-cloudflare preview",
     "deploy": "npm run cloudflare-build && wrangler deploy",
     "upload": "npm cloudflare-build && opennextjs-cloudflare upload",
