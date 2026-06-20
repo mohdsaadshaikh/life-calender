@@ -1,7 +1,6 @@
 import type React from "react";
 import type { Metadata } from "next";
 import { Outfit, Fredoka, Space_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -38,7 +37,6 @@ export default function RootLayout({
         className={`${outfit.variable} ${fredoka.variable} ${spaceMono.variable} font-sans antialiased`}
       >
         {children}
-        <Analytics />
       </body>
     </html>
   );
