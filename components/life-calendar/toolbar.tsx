@@ -59,9 +59,8 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => setViewMode(option.id)}
-                  className={`p-3 neo-border transition-all ${
-                    viewMode === option.id ? "bg-primary neo-shadow" : "bg-muted hover:bg-secondary"
-                  }`}
+                  className={`p-3 neo-border transition-all ${viewMode === option.id ? "bg-primary neo-shadow" : "bg-muted hover:bg-secondary"
+                    }`}
                   aria-label={option.label}
                   aria-pressed={viewMode === option.id}
                 >
@@ -143,8 +142,8 @@ export function Toolbar({ onOpenSettings }: ToolbarProps) {
           </Tooltip>
 
           <motion.button
-          whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={onOpenSettings}
             className="p-3 neo-border bg-accent neo-shadow"
             aria-label="Open settings"

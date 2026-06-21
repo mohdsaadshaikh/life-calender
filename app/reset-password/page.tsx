@@ -77,7 +77,7 @@ export default function ResetPasswordPage() {
               <path d="M75 125 C30 110 25 35 25 35 L75 20 L125 35 C125 35 120 110 75 125 Z" fill="#000" />
               {/* Shield Body */}
               <path d="M72 120 C32 106 27 36 27 36 L72 22 L117 36 C117 36 112 106 72 120 Z" fill="#FF5B87" stroke="currentColor" strokeWidth="4.5" />
-              
+
               {/* Inner Key and padlock design */}
               <g transform="translate(48, 42)">
                 {/* Padlock Body */}

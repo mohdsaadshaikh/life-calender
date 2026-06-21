@@ -22,9 +22,9 @@ export function TimelineView({ onWeekClick }: TimelineViewProps) {
   const { scrollYProgress } = useScroll(
     isHydrated && containerRef.current
       ? {
-          target: containerRef,
-          offset: ["start start", "end end"],
-        }
+        target: containerRef,
+        offset: ["start start", "end end"],
+      }
       : {},
   );
 

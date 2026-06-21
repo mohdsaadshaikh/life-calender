@@ -67,10 +67,10 @@ export default function ForgotPasswordPage() {
               <rect x="25" y="45" width="80" height="55" rx="6" fill="#000" />
               {/* Envelop/Mail Body */}
               <rect x="21" y="41" width="80" height="55" rx="6" fill="#FAF5E6" stroke="currentColor" strokeWidth="3.5" />
-              
+
               {/* Envelop flap lines */}
               <path d="M21 41 L61 71 L101 41" stroke="currentColor" strokeWidth="3.5" fill="none" strokeLinejoin="round" />
-              
+
               {/* Sparking stars */}
               <path d="M115 25 L117 30 L122 31 L117 32 L115 37 L113 32 L108 31 L113 30 Z" fill="#FF5B87" stroke="currentColor" strokeWidth="1.5" />
 
@@ -81,12 +81,12 @@ export default function ForgotPasswordPage() {
                 {/* Handle */}
                 <line x1="35" y1="35" x2="58" y2="58" stroke="#FF5B87" strokeWidth="7" strokeLinecap="round" />
                 <line x1="35" y1="35" x2="58" y2="58" stroke="currentColor" strokeWidth="7" strokeLinecap="round" />
-                
+
                 {/* Glass frame shadow */}
                 <circle cx="20" cy="20" r="22" fill="none" stroke="#000" strokeWidth="6" />
                 {/* Glass frame */}
                 <circle cx="17" cy="17" r="22" fill="#22B8CF" stroke="currentColor" strokeWidth="4.5" />
-                
+
                 {/* Key inside lens */}
                 <g transform="translate(7, 7)">
                   <circle cx="5" cy="5" r="3" fill="none" stroke="currentColor" strokeWidth="2" />

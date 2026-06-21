@@ -144,30 +144,30 @@ export function EventModal({ week, event, onClose }: EventModalProps) {
         className="fixed inset-0 bg-foreground/50 z-50 flex items-center justify-center p-4"
         onClick={onClose}
       >
-         <motion.div
-           initial={{ scale: 0.8, rotate: -5, y: 50 }}
-           animate={{ scale: 1, rotate: 0, y: 0 }}
-           exit={{ scale: 0.8, rotate: 5, y: 50 }}
-           transition={{ type: "spring", damping: 20 }}
-           onClick={(e) => e.stopPropagation()}
-           className="bg-card neo-border neo-shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
-           role="dialog"
-           aria-modal="true"
-           aria-labelledby="event-modal-title"
-         >
-           {/* Header */}
-           <div className="flex items-center justify-between p-4 border-b-3 border-border bg-primary">
-             <h2 id="event-modal-title" className="text-xl font-bold">{event ? "EDIT EVENT" : "ADD EVENT"}</h2>
-             <motion.button
-               whileHover={{ scale: 1.1, }}
-               whileTap={{ scale: 0.9 }}
-               onClick={onClose}
-               className="bg-card neo-border p-2"
-               aria-label="Close event modal"
-             >
-               <X className="w-5 h-5" />
-             </motion.button>
-           </div>
+        <motion.div
+          initial={{ scale: 0.8, rotate: -5, y: 50 }}
+          animate={{ scale: 1, rotate: 0, y: 0 }}
+          exit={{ scale: 0.8, rotate: 5, y: 50 }}
+          transition={{ type: "spring", damping: 20 }}
+          onClick={(e) => e.stopPropagation()}
+          className="bg-card neo-border neo-shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="event-modal-title"
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 border-b-3 border-border bg-primary">
+            <h2 id="event-modal-title" className="text-xl font-bold">{event ? "EDIT EVENT" : "ADD EVENT"}</h2>
+            <motion.button
+              whileHover={{ scale: 1.1, }}
+              whileTap={{ scale: 0.9 }}
+              onClick={onClose}
+              className="bg-card neo-border p-2"
+              aria-label="Close event modal"
+            >
+              <X className="w-5 h-5" />
+            </motion.button>
+          </div>
 
           {/* Week Info */}
           <div className="p-4 bg-muted border-b-3 border-border">
@@ -182,156 +182,154 @@ export function EventModal({ week, event, onClose }: EventModalProps) {
             </p>
           </div>
 
-            {/* Form */}
-            <form id="event-form" className="p-4 space-y-4" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
-             {/* Title */}
-             <fieldset className="space-y-2">
-               <Label htmlFor="event-title" className="flex items-center gap-2 font-bold">
-                 <Type className="w-4 h-4" /> Title
-               </Label>
-               <Input
-                 id="event-title"
-                 value={title}
-                 onChange={(e) => setTitle(e.target.value)}
-                 placeholder="Event title..."
-                 className="neo-border"
-                 required
-                 aria-required="true"
-               />
-             </fieldset>
+          {/* Form */}
+          <form id="event-form" className="p-4 space-y-4" onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+            {/* Title */}
+            <fieldset className="space-y-2">
+              <Label htmlFor="event-title" className="flex items-center gap-2 font-bold">
+                <Type className="w-4 h-4" /> Title
+              </Label>
+              <Input
+                id="event-title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Event title..."
+                className="neo-border"
+                required
+                aria-required="true"
+              />
+            </fieldset>
 
-             {/* Description */}
-             <fieldset className="space-y-2">
-               <Label htmlFor="event-description" className="flex items-center gap-2 font-bold">
-                 <AlignLeft className="w-4 h-4" /> Description
-               </Label>
-               <Textarea
-                 id="event-description"
-                 value={description}
-                 onChange={(e) => setDescription(e.target.value)}
-                 placeholder="Describe this event..."
-                 rows={3}
-                 className="neo-border"
-               />
-             </fieldset>
+            {/* Description */}
+            <fieldset className="space-y-2">
+              <Label htmlFor="event-description" className="flex items-center gap-2 font-bold">
+                <AlignLeft className="w-4 h-4" /> Description
+              </Label>
+              <Textarea
+                id="event-description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Describe this event..."
+                rows={3}
+                className="neo-border"
+              />
+            </fieldset>
 
-             {/* Dates */}
-             <fieldset className="grid grid-cols-2 gap-4">
-               <div className="space-y-2">
-                 <Label htmlFor="event-start-date" className="font-bold">Start Date</Label>
-                 <Input
-                   id="event-start-date"
-                   type="date"
-                   value={startDate}
-                   onChange={(e) => setStartDate(e.target.value)}
-                   className="neo-border font-mono"
-                   required
-                   aria-required="true"
-                 />
-               </div>
-               <div className="space-y-2">
-                 <Label htmlFor="event-end-date" className="font-bold">End Date (optional)</Label>
-                 <Input
-                   id="event-end-date"
-                   type="date"
-                   value={endDate}
-                   onChange={(e) => setEndDate(e.target.value)}
-                   className="neo-border font-mono"
-                 />
-               </div>
-             </fieldset>
+            {/* Dates */}
+            <fieldset className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="event-start-date" className="font-bold">Start Date</Label>
+                <Input
+                  id="event-start-date"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="neo-border font-mono"
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="event-end-date" className="font-bold">End Date (optional)</Label>
+                <Input
+                  id="event-end-date"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="neo-border font-mono"
+                />
+              </div>
+            </fieldset>
 
-             {/* Category */}
-             <fieldset className="space-y-2">
-               <legend className="flex items-center gap-2 font-bold">
-                 <Tag className="w-4 h-4" /> Category
-               </legend>
-               <div className="flex flex-wrap gap-2">
-                  {categories.map((cat) => (
-                    <motion.button
-                      type="button"
-                      key={cat.id}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`px-3 py-2 neo-border font-bold text-sm transition-all ${
-                        selectedCategory.id === cat.id ? "neo-shadow" : ""
+            {/* Category */}
+            <fieldset className="space-y-2">
+              <legend className="flex items-center gap-2 font-bold">
+                <Tag className="w-4 h-4" /> Category
+              </legend>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((cat) => (
+                  <motion.button
+                    type="button"
+                    key={cat.id}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-3 py-2 neo-border font-bold text-sm transition-all ${selectedCategory.id === cat.id ? "neo-shadow" : ""
                       }`}
-                      style={{
-                        backgroundColor: selectedCategory.id === cat.id ? cat.color : "transparent",
-                      }}
-                      aria-label={`Select ${cat.name} category`}
-                      aria-pressed={selectedCategory.id === cat.id}
-                    >
-                      {cat.name}
-                    </motion.button>
-                  ))}
-               </div>
-             </fieldset>
+                    style={{
+                      backgroundColor: selectedCategory.id === cat.id ? cat.color : "transparent",
+                    }}
+                    aria-label={`Select ${cat.name} category`}
+                    aria-pressed={selectedCategory.id === cat.id}
+                  >
+                    {cat.name}
+                  </motion.button>
+                ))}
+              </div>
+            </fieldset>
 
-             {/* Color */}
-             <fieldset className="space-y-2">
-               <legend className="flex items-center gap-2 font-bold">
-                 <Palette className="w-4 h-4" /> Color
-               </legend>
-               <div className="flex flex-wrap gap-2">
-                  {PRESET_COLORS.map((presetColor) => (
-                    <motion.button
-                      type="button"
-                      key={presetColor}
-                      whileHover={{ scale: 1.2 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => setColor(presetColor)}
-                      className={`w-10 h-10 neo-border ${
-                        color === presetColor ? "neo-shadow ring-2 ring-foreground" : ""
+            {/* Color */}
+            <fieldset className="space-y-2">
+              <legend className="flex items-center gap-2 font-bold">
+                <Palette className="w-4 h-4" /> Color
+              </legend>
+              <div className="flex flex-wrap gap-2">
+                {PRESET_COLORS.map((presetColor) => (
+                  <motion.button
+                    type="button"
+                    key={presetColor}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setColor(presetColor)}
+                    className={`w-10 h-10 neo-border ${color === presetColor ? "neo-shadow ring-2 ring-foreground" : ""
                       }`}
-                      style={{ backgroundColor: presetColor }}
-                      aria-label={`Select color ${presetColor}`}
-                      aria-pressed={color === presetColor}
-                    />
-                   ))}
-               </div>
-             </fieldset>
-           </form>
+                    style={{ backgroundColor: presetColor }}
+                    aria-label={`Select color ${presetColor}`}
+                    aria-pressed={color === presetColor}
+                  />
+                ))}
+              </div>
+            </fieldset>
+          </form>
 
-           {/* Actions */}
-           <div className="p-4 border-t-3 border-border flex gap-3">
-             {event && (
-               <motion.button
-                 type="button"
-                 whileHover={{ scale: 1.05 }}
-                 whileTap={{ scale: 0.95 }}
-                 onClick={handleDelete}
-                 className="bg-destructive text-destructive-foreground neo-border neo-shadow px-4 py-3 font-bold flex items-center gap-2"
-                 aria-label="Delete event"
-               >
-                 <Trash2 className="w-4 h-4" />
-                 DELETE
-               </motion.button>
-             )}
-             <motion.button
-               type="button"
-               whileHover={{ scale: 1.05 }}
-               whileTap={{ scale: 0.95 }}
-               onClick={onClose}
-               className="bg-muted neo-border px-4 py-3 font-bold ml-auto"
-               aria-label="Cancel and close modal"
-             >
-               CANCEL
-             </motion.button>
-             <motion.button
-               type="submit"
-               form="event-form"
-               whileHover={{ scale: 1.05, x: 4, y: -4 }}
-               whileTap={{ scale: 0.95 }}
-               disabled={!title.trim()}
-               className="bg-accent text-accent-foreground neo-border neo-shadow px-6 py-3 font-bold flex items-center gap-2 disabled:opacity-50"
-               aria-label={event ? "Update event" : "Save new event"}
-             >
-               <Save className="w-4 h-4" />
-               {event ? "UPDATE" : "SAVE"}
-             </motion.button>
-           </div>
+          {/* Actions */}
+          <div className="p-4 border-t-3 border-border flex gap-3">
+            {event && (
+              <motion.button
+                type="button"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleDelete}
+                className="bg-destructive text-destructive-foreground neo-border neo-shadow px-4 py-3 font-bold flex items-center gap-2"
+                aria-label="Delete event"
+              >
+                <Trash2 className="w-4 h-4" />
+                DELETE
+              </motion.button>
+            )}
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onClose}
+              className="bg-muted neo-border px-4 py-3 font-bold ml-auto"
+              aria-label="Cancel and close modal"
+            >
+              CANCEL
+            </motion.button>
+            <motion.button
+              type="submit"
+              form="event-form"
+              whileHover={{ scale: 1.05, x: 4, y: -4 }}
+              whileTap={{ scale: 0.95 }}
+              disabled={!title.trim()}
+              className="bg-accent text-accent-foreground neo-border neo-shadow px-6 py-3 font-bold flex items-center gap-2 disabled:opacity-50"
+              aria-label={event ? "Update event" : "Save new event"}
+            >
+              <Save className="w-4 h-4" />
+              {event ? "UPDATE" : "SAVE"}
+            </motion.button>
+          </div>
         </motion.div>
       </motion.div>
     </AnimatePresence>
