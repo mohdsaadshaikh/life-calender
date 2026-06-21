@@ -290,7 +290,7 @@ export function HeroSection() {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 1.5, repeat: Infinity }}
-          className="bg-card neo-border neo-shadow px-4 py-3"
+          className="neo-border bg-muted neo-shadow px-4 py-3"
         >
           <span className="font-bold text-sm">SCROLL DOWN</span>
         </motion.div>
