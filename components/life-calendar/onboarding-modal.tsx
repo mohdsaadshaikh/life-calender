@@ -33,6 +33,16 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
   const [selectedYear, setSelectedYear] = useState<string>(
     new Date().getFullYear().toString(),
   );
+  const [month, setMonth] = useState<Date>(new Date());
+
+  const handleYearChange = (year: string) => {
+    setSelectedYear(year);
+    setMonth((currentMonth) => {
+      const newMonth = new Date(currentMonth);
+      newMonth.setFullYear(parseInt(year));
+      return newMonth;
+    });
+  };
 
   const steps = [
     {
@@ -142,7 +152,7 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
                   <div className="">
                     <Select
                       value={selectedYear}
-                      onValueChange={setSelectedYear}
+                      onValueChange={handleYearChange}
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue />
@@ -167,8 +177,9 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
                         }
                       }}
                       disabled={(date) => date > new Date()}
-                      month={new Date(parseInt(selectedYear), 0)}
+                      month={month}
                       onMonthChange={(date) => {
+                        setMonth(date);
                         setSelectedYear(date.getFullYear().toString());
                       }}
                       initialFocus

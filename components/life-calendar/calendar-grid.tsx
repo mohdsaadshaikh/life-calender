@@ -41,7 +41,7 @@ export function CalendarGrid({ onWeekClick }: CalendarGridProps) {
       {/* Scrollable grid container */}
       <div
         ref={containerRef}
-        className="overflow-auto p-1 bg-transparent border-0 max-w-full w-full max-h-[500px]"
+        className="overflow-auto p-1 bg-transparent border-0 max-w-full w-full max-h-[550px]"
       >
         <div className="flex justify-start lg:justify-start w-max">
           {/* Year column */}

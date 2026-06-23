@@ -4,6 +4,8 @@ import { motion } from "framer-motion"
 import { Calendar, Menu, X } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"
+import { Show } from "@clerk/nextjs"
+import { Logo } from "@/components/ui/logo"
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -18,12 +20,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto">
         <div className="bg-card neo-border neo-shadow flex items-center justify-between px-4 py-3 md:px-6">
           <Link href="/">
-            <motion.div whileHover={{ scale: 1.1, }} className="flex items-center gap-2">
-              <div className="bg-primary neo-border p-2">
-                <Calendar className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="font-bold text-lg md:text-xl">LIFE CALENDAR</span>
-            </motion.div>
+            <Logo />
           </Link>
 
           {/* Desktop Nav */}
@@ -39,15 +36,28 @@ export function Navbar() {
                 {item}
               </motion.a>
             ))}
-            <Link href="/signin">
-              <motion.button
-                whileHover={{ scale: 1.05, x: 4, y: -4 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-primary text-primary-foreground neo-border neo-shadow px-6 py-2 font-bold hover:text-secondary-foreground transition-colors cursor-pointer"
-              >
-                GET STARTED
-              </motion.button>
-            </Link>
+            <Show when="signed-out">
+              <Link href="/signin">
+                <motion.button
+                  whileHover={{ scale: 1.05, x: 4, y: -4 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-primary text-primary-foreground neo-border neo-shadow px-6 py-2 font-bold hover:text-secondary-foreground transition-colors cursor-pointer"
+                >
+                  GET STARTED
+                </motion.button>
+              </Link>
+            </Show>
+            <Show when="signed-in">
+              <Link href="/calendar">
+                <motion.button
+                  whileHover={{ scale: 1.05, x: 4, y: -4 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-secondary text-secondary-foreground neo-border neo-shadow px-6 py-2 font-bold hover:text-primary-foreground transition-colors cursor-pointer"
+                >
+                  CALENDER
+                </motion.button>
+              </Link>
+            </Show>
           </div>
 
           {/* Mobile Menu Button */}
@@ -77,11 +87,20 @@ export function Navbar() {
                 {item}
               </a>
             ))}
-            <Link href="/signin" onClick={() => setIsOpen(false)}>
-              <button className="w-full bg-primary text-primary-foreground neo-border neo-shadow px-6 py-3 font-bold mt-2 hover:text-secondary-foreground transition-colors cursor-pointer">
-                GET STARTED
-              </button>
-            </Link>
+            <Show when="signed-out">
+              <Link href="/signin" onClick={() => setIsOpen(false)}>
+                <button className="w-full bg-primary text-primary-foreground neo-border neo-shadow px-6 py-3 font-bold mt-2 hover:text-secondary-foreground transition-colors cursor-pointer">
+                  GET STARTED
+                </button>
+              </Link>
+            </Show>
+            <Show when="signed-in">
+              <Link href="/calendar" onClick={() => setIsOpen(false)}>
+                <button className="w-full bg-secondary text-secondary-foreground neo-border neo-shadow px-6 py-3 font-bold mt-2 hover:text-primary-foreground transition-colors cursor-pointer">
+                  CALENDER
+                </button>
+              </Link>
+            </Show>
           </div>
         </motion.div>
       </div>

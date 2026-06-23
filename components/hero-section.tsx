@@ -84,7 +84,7 @@ function FloatingShape({
   delay = 0,
 }: {
   className: string;
-  animate: TargetAndTransition;
+  animate: any;
   delay?: number;
 }) {
   return (

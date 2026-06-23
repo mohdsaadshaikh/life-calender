@@ -8,16 +8,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useSignIn } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
   const { toast } = useToast();
+  const router = useRouter();
+  const { signIn, fetchStatus } = useSignIn();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!signIn) return;
+
     if (!email || !password) {
       toast({
         title: "Validation Error",
@@ -28,21 +35,98 @@ export default function SignInPage() {
     }
 
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      console.log("Initiating password signin for:", email);
+      const res = await signIn.password({
+        identifier: email,
+        password: password,
+      });
+      console.log("Signin password result:", res);
+      console.log("Current signIn state:", {
+        id: signIn.id,
+        status: signIn.status,
+        supportedFirstFactors: signIn.supportedFirstFactors,
+      });
+
+      if (res?.error) {
+        setIsLoading(false);
+        toast({
+          title: "Sign In Error",
+          description: res.error.message || "Failed to sign in. Please check your credentials.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (signIn.status === "complete") {
+        toast({
+          title: "Welcome back!",
+          description: "Successfully signed in.",
+        });
+        const finalizeRes = await signIn.finalize({
+          navigate: ({ session, decorateUrl }) => {
+            const url = decorateUrl("/calendar");
+            if (url.startsWith("http")) {
+              window.location.href = url;
+            } else {
+              router.push(url);
+            }
+          },
+        });
+        console.log("Finalize result:", finalizeRes);
+        if (finalizeRes?.error) {
+          setIsLoading(false);
+          toast({
+            title: "Finalization Error",
+            description: finalizeRes.error.message || "Failed to finalize session.",
+            variant: "destructive",
+          });
+        }
+      } else {
+        setIsLoading(false);
+        toast({
+          title: "Status Update",
+          description: `Sign in status: ${signIn.status}. Please complete the flow.`,
+        });
+      }
+    } catch (err: any) {
+      console.error("Signin catch error:", err);
       setIsLoading(false);
       toast({
-        title: "Welcome back!",
-        description: "Successfully signed in (static demo).",
+        title: "Sign In Error",
+        description: err.message || "An unexpected error occurred during sign in.",
+        variant: "destructive",
       });
-    }, 1200);
+    }
   };
 
-  const handleGoogleSignIn = () => {
-    toast({
-      title: "Google Authentication",
-      description: "Redirecting to Google OAuth (static demo)...",
-    });
+  const handleGoogleSignIn = async () => {
+    if (!signIn) return;
+    try {
+      console.log("Initiating Google Sign In SSO...");
+      const res = await signIn.sso({
+        strategy: "oauth_google",
+        redirectUrl: "/calendar",
+        redirectCallbackUrl: "/sso-callback",
+      });
+      console.log("SSO result:", res);
+      if (res?.error) {
+        toast({
+          title: "Google Authentication Error",
+          description: res.error.message || "Failed to initiate Google sign in.",
+          variant: "destructive",
+        });
+      }
+    } catch (err: any) {
+      console.error("SSO catch error:", err);
+      toast({
+        title: "Google Authentication Error",
+        description: err.message || "Failed to initiate Google sign in.",
+        variant: "destructive",
+      });
+    }
   };
+
 
   return (
     <main className="relative min-h-screen horizons-bg flex flex-col items-center justify-center p-4 md:p-8">
@@ -89,10 +173,11 @@ export default function SignInPage() {
             {/* Google Authentication Button */}
             <motion.button
               type="button"
+              disabled={isLoading || !signIn || fetchStatus === "fetching"}
               whileHover={{ scale: 1.02, x: 4, y: -4 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleGoogleSignIn}
-              className="w-full bg-primary text-black font-extrabold neo-border neo-shadow p-3.5 flex items-center justify-center gap-3 cursor-pointer select-none mb-6"
+              className="w-full bg-primary text-black font-extrabold neo-border neo-shadow p-3.5 flex items-center justify-center gap-3 cursor-pointer select-none mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {/* Custom flat Google Icon */}
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -162,25 +247,16 @@ export default function SignInPage() {
                 </div>
               </div>
 
-              {/* Remember Me */}
-              <div className="flex items-center gap-2">
-                <input
-                  id="remember"
-                  type="checkbox"
-                  className="w-5 h-5 rounded-md border-3 border-black text-primary focus:ring-0 checked:bg-primary cursor-pointer accent-black"
-                />
-                <label htmlFor="remember" className="font-bold text-xs cursor-pointer select-none">
-                  REMEMBER MY SESSION
-                </label>
-              </div>
+              {/* CAPTCHA Widget */}
+              <div id="clerk-captcha" className="mt-2" />
 
               {/* Submit Button */}
               <motion.button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || !signIn || fetchStatus === "fetching"}
                 whileHover={{ scale: 1.02, x: 4, y: -4 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-secondary text-black font-extrabold neo-border neo-shadow p-4 flex items-center justify-center gap-2 cursor-pointer select-none"
+                className="w-full bg-secondary text-black font-extrabold neo-border neo-shadow p-4 flex items-center justify-center gap-2 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span>{isLoading ? "SIGNING IN..." : "SIGN IN"}</span>
               </motion.button>

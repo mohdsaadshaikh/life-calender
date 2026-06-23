@@ -63,6 +63,7 @@ interface LifeCalendarState {
   // Calendar initialized
   isInitialized: boolean;
   initializeCalendar: (birthDate: Date, calendarName?: string) => void;
+  resetStore: () => void;
 
   // Get computed data
   getWeeksData: () => WeekData[];
@@ -174,6 +175,16 @@ export const useLifeCalendarStore = create<LifeCalendarState>()(
             settings: { ...DEFAULT_SETTINGS, birthDate },
           });
         }
+      },
+      resetStore: () => {
+        set({
+          calendars: [],
+          activeCalendarId: null,
+          settings: DEFAULT_SETTINGS,
+          events: [],
+          categories: DEFAULT_CATEGORIES,
+          isInitialized: false,
+        });
       },
 
       getWeeksData: () => {

@@ -11,6 +11,9 @@ import type { WeekData, LifeEvent } from "@/lib/life-calendar-utils";
 import { calculateAge, safeFormatDate } from "@/lib/life-calendar-utils";
 import { Calendar, ArrowLeft, Flame, LogOut, Plus, Keyboard, HelpCircle, BarChart3, Clock, GitBranch, Search, ZoomIn, ZoomOut } from "lucide-react";
 import Link from "next/link";
+import { UserButton } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { LogoIcon } from "@/components/ui/logo";
 
 // Lazy load heavy components
 const StatsDashboard = dynamic(
@@ -53,13 +56,6 @@ const WeekDetailsPanel = dynamic(
   { ssr: false, loading: () => <LoadingPlaceholder /> },
 );
 
-const OnboardingModal = dynamic(
-  () =>
-    import("@/components/life-calendar/onboarding-modal").then((mod) => ({
-      default: mod.OnboardingModal,
-    })),
-  { ssr: false, loading: () => <LoadingPlaceholder /> },
-);
 
 function LoadingPlaceholder() {
   return (
@@ -69,37 +65,44 @@ function LoadingPlaceholder() {
   );
 }
 
-function TypewriterLoader() {
-  const text = "Loading your life calendar...";
-  const [displayedText, setDisplayedText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    if (currentIndex < text.length) {
-      const timeout = setTimeout(() => {
-        setDisplayedText((prev) => prev + text[currentIndex]);
-        setCurrentIndex((prev) => prev + 1);
-      }, 80);
-      return () => clearTimeout(timeout);
-    }
-  }, [currentIndex, text]);
-
+function RetroLoader() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F6F0E5] gap-8 horizons-bg">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F6F0E5] gap-6 horizons-bg select-none">
+      {/* Rotating Logo Icon */}
       <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        className="bg-primary neo-border neo-shadow p-6"
+        animate={{ 
+          rotate: [0, 90, 180, 270, 360],
+          scale: [1, 1.08, 1, 1.08, 1]
+        }}
+        transition={{ 
+          repeat: Infinity, 
+          duration: 3.5, 
+          ease: "easeInOut" 
+        }}
       >
-        <Calendar className="w-12 h-12 text-black" />
+        <LogoIcon className="w-16 h-16 shadow-[4px_4px_0px_#000] border-[4px]" />
       </motion.div>
-      <div className="bg-[#FCFBF9] neo-border neo-shadow px-8 py-4 min-w-[300px] text-center">
-        <span className="font-extrabold text-lg">{displayedText}</span>
-        <motion.span
-          animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.5, repeat: Infinity }}
-          className="inline-block w-3 h-6 bg-black ml-1 align-middle"
+
+      {/* Retro Striped Progress Bar */}
+      <div className="w-64 h-6 bg-[#FCFBF9] border-[3px] border-black rounded-xl overflow-hidden shadow-[4px_4px_0px_#000] relative">
+        <motion.div
+          animate={{ x: ["-100%", "100%"] }}
+          transition={{ repeat: Infinity, duration: 1.8, ease: "linear" }}
+          className="absolute inset-y-0 w-1/2 h-full bg-[#7ed957] border-r-[3px] border-black"
+          style={{
+            backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(0,0,0,0.08) 8px, rgba(0,0,0,0.08) 16px)"
+          }}
         />
+      </div>
+
+      {/* Pulsing Text */}
+      <div className="text-center font-black uppercase text-sm tracking-widest font-mono text-black/70">
+        <motion.span
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Mapping your timeline...
+        </motion.span>
       </div>
     </div>
   );
@@ -117,9 +120,10 @@ export default function CalendarPage() {
     getWeeksData,
     zoomLevel,
     setZoomLevel,
+    resetStore,
   } = useLifeCalendarStore();
 
-  const [showOnboarding, setShowOnboarding] = useState(false);
+  const router = useRouter();
   const [showSettings, setShowSettings] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState<LifeEvent | null>(null);
@@ -127,13 +131,24 @@ export default function CalendarPage() {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+
+    // Check if the user just signed up (detected by query param)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("signup") === "true") {
+      resetStore();
+      router.push("/calendar/onboarding");
+
+      // Clean up the URL parameter to avoid re-triggering on manual refresh
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+    }
+  }, [resetStore, router]);
 
   useEffect(() => {
     if (mounted && !isInitialized) {
-      setShowOnboarding(true);
+      router.push("/calendar/onboarding");
     }
-  }, [mounted, isInitialized]);
+  }, [mounted, isInitialized, router]);
 
   // Extract active calendar details
   const activeCalendar = calendars.find((c) => c.id === activeCalendarId) || null;
@@ -155,7 +170,7 @@ export default function CalendarPage() {
         document.activeElement?.tagName === "TEXTAREA" ||
         showEventModal ||
         showSettings ||
-        showOnboarding
+        window.location.pathname.endsWith("/onboarding")
       ) {
         return;
       }
@@ -194,7 +209,7 @@ export default function CalendarPage() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedWeek, setSelectedWeek, getWeeksData, showEventModal, showSettings, showOnboarding]);
+  }, [selectedWeek, setSelectedWeek, getWeeksData, showEventModal, showSettings]);
 
   const handleWeekClick = (week: WeekData) => {
     setSelectedWeek(week);
@@ -216,12 +231,12 @@ export default function CalendarPage() {
   };
 
   if (!mounted) {
-    return <TypewriterLoader />;
+    return <RetroLoader />;
   }
 
   return (
     <ErrorBoundary>
-      <main className="max-h-screen horizons-bg p-4 md:p-6 lg:p-8 flex flex-col gap-6 text-black">
+      <main className="h-screen horizons-bg p-4 md:p-6 lg:p-8 flex flex-col gap-6 text-black">
         {/* Header Section (Outlined retro title style) */}
         <header className="flex flex-col md:flex-row items-center justify-between gap-4 w-full max-w-[1600px] mx-auto select-none">
           <div className="flex items-center gap-4">
@@ -275,7 +290,7 @@ export default function CalendarPage() {
             <CalendarSwitcher />
 
             {/* Life Progress Card (Stacked below Switcher) */}
-            <div className="bg-[#0C0A09] text-white neo-border-thick p-6 flex flex-col justify-between relative overflow-hidden min-h-[300px]">
+            <div className="bg-[#0C0A09] text-white neo-border-thick p-6 flex flex-col justify-between relative overflow-hidden min-h-[250px]">
               {/* Stylized Hourglass SVG Background */}
               <div className="absolute -top-2 -right-2 pointer-events-none opacity-15">
                 <svg className="w-32 h-32 stroke-white fill-none stroke-[1.5]" viewBox="0 0 24 24">
@@ -292,16 +307,12 @@ export default function CalendarPage() {
                 </svg>
               </div>
 
-              <div className="relative z-10 flex flex-col gap-2">
-                <div className="bg-white/10 text-white border-2 border-white/20 rounded px-2.5 py-0.5 text-[9px] font-black tracking-widest uppercase self-start select-none">
-                  LIFE METRICS
-                </div>
-                <div>
-                  <h3 className="text-2xl font-black tracking-tight">{calendarName} Progress</h3>
-                  <p className="text-xs text-neutral-400 font-bold uppercase select-none mt-1">
-                    {safeFormatDate(birthDate)} • {lifeExpectancy}y Expected
-                  </p>
-                </div>
+
+              <div>
+                <h3 className="text-2xl font-black tracking-tight">{calendarName} Progress</h3>
+                <p className="text-xs text-neutral-400 font-bold uppercase select-none mt-1">
+                  {safeFormatDate(birthDate)} • <span className="font-extrabold text-white/80">{age.years}y {age.months}m</span>
+                </p>
               </div>
 
               {/* Progress bar container */}
@@ -323,17 +334,7 @@ export default function CalendarPage() {
                 </div>
               </div>
 
-              {/* Extra Life Stats */}
-              <div className="relative z-10 grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-white/10 text-xs select-none">
-                <div>
-                  <span className="text-neutral-400 font-bold uppercase block text-[9px] tracking-wider">Current Age</span>
-                  <span className="text-base font-black text-white">{age.years}y {age.months}m</span>
-                </div>
-                <div>
-                  <span className="text-neutral-400 font-bold uppercase block text-[9px] tracking-wider">Weeks Left</span>
-                  <span className="text-base font-black text-white">{(totalWeeks - weeksLived).toLocaleString()}</span>
-                </div>
-              </div>
+
             </div>
           </section>
 
@@ -442,12 +443,7 @@ export default function CalendarPage() {
 
 
 
-        {/* Panels and Modals */}
-        <AnimatePresence>
-          {showOnboarding && (
-            <OnboardingModal onComplete={() => setShowOnboarding(false)} />
-          )}
-        </AnimatePresence>
+
 
         <AnimatePresence>
           {showSettings && (
@@ -475,6 +471,11 @@ export default function CalendarPage() {
             />
           )}
         </AnimatePresence>
+
+        {/* Floating User Profile Button */}
+        <div className="fixed bottom-6 right-6 z-50 flex items-center justify-center bg-white neo-border p-1.5 shadow-[4px_4px_0px_0px_#000] hover:scale-105 transition-transform">
+          <UserButton />
+        </div>
       </main>
     </ErrorBoundary>
   );
