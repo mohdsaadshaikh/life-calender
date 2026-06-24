@@ -80,7 +80,7 @@ function RetroLoader() {
           ease: "easeInOut" 
         }}
       >
-        <LogoIcon className="w-16 h-16 shadow-[4px_4px_0px_#000] border-[4px]" />
+        <LogoIcon className="w-16 h-16 drop-shadow-[4px_4px_0px_#000]" />
       </motion.div>
 
       {/* Retro Striped Progress Bar */}
