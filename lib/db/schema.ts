@@ -1,11 +1,27 @@
 import { pgTable, varchar, timestamp, integer, boolean, text } from "drizzle-orm/pg-core";
 
 /**
+ * Users Table
+ * Synchronized with Clerk auth
+ */
+export const users = pgTable("users", {
+  id: varchar("id", { length: 128 }).primaryKey(), // Clerk User ID
+  email: varchar("email", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }),
+  imageUrl: text("image_url"),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
+/**
  * Calendars Table
  * Maps to the Calendar interface
  */
 export const calendars = pgTable("calendars", {
   id: varchar("id", { length: 128 }).primaryKey(),
+  userId: varchar("user_id", { length: 128 })
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 255 }).notNull(),
   color: varchar("color", { length: 50 }).notNull(),
   birthDate: timestamp("birth_date", { mode: "date" }).notNull(),
@@ -48,7 +64,9 @@ export const events = pgTable("events", {
  * Maps to CalendarSettings and global state (e.g. activeCalendarId)
  */
 export const globalSettings = pgTable("global_settings", {
-  id: integer("id").primaryKey(), // Enforced single row (e.g., id = 1)
+  userId: varchar("user_id", { length: 128 })
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
   activeCalendarId: varchar("active_calendar_id", { length: 128 }).references(() => calendars.id, { onDelete: "set null" }),
   weekStartsOn: integer("week_starts_on").notNull().default(1), // 0 = Sunday, 1 = Monday
   showFutureWeeks: boolean("show_future_weeks").notNull().default(true),
@@ -56,6 +74,9 @@ export const globalSettings = pgTable("global_settings", {
 });
 
 // Relations can be added here if you want to use drizzle relations query API later.
+export type DbUser = typeof users.$inferSelect;
+export type NewDbUser = typeof users.$inferInsert;
+
 export type DbCalendar = typeof calendars.$inferSelect;
 export type NewDbCalendar = typeof calendars.$inferInsert;
 
