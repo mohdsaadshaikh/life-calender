@@ -38,17 +38,23 @@ CREATE TABLE "global_settings" (
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
-	"id" varchar(128) PRIMARY KEY NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
+	"clerk_id" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL,
-	"name" varchar(255),
+	"first_name" varchar(255),
+	"last_name" varchar(255),
 	"image_url" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "users_clerk_id_unique" UNIQUE("clerk_id"),
+	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
-ALTER TABLE "calendars" ADD CONSTRAINT "calendars_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "calendars" ADD CONSTRAINT "calendars_user_id_users_clerk_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("clerk_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "categories" ADD CONSTRAINT "categories_calendar_id_calendars_id_fk" FOREIGN KEY ("calendar_id") REFERENCES "public"."calendars"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "events" ADD CONSTRAINT "events_calendar_id_calendars_id_fk" FOREIGN KEY ("calendar_id") REFERENCES "public"."calendars"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "events" ADD CONSTRAINT "events_category_id_categories_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."categories"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "global_settings" ADD CONSTRAINT "global_settings_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "global_settings" ADD CONSTRAINT "global_settings_active_calendar_id_calendars_id_fk" FOREIGN KEY ("active_calendar_id") REFERENCES "public"."calendars"("id") ON DELETE set null ON UPDATE no action;
+ALTER TABLE "global_settings" ADD CONSTRAINT "global_settings_user_id_users_clerk_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("clerk_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "global_settings" ADD CONSTRAINT "global_settings_active_calendar_id_calendars_id_fk" FOREIGN KEY ("active_calendar_id") REFERENCES "public"."calendars"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "clerk_id_idx" ON "users" USING btree ("clerk_id");--> statement-breakpoint
+CREATE INDEX "email_idx" ON "users" USING btree ("email");

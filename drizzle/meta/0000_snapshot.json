@@ -1,5 +1,5 @@
 {
-  "id": "d35cdf63-80fe-4b1b-8c17-93f7d03fd8d8",
+  "id": "aaefb1ed-3b90-430c-8022-c0e41c65daf9",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -62,15 +62,15 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "calendars_user_id_users_id_fk": {
-          "name": "calendars_user_id_users_id_fk",
+        "calendars_user_id_users_clerk_id_fk": {
+          "name": "calendars_user_id_users_clerk_id_fk",
           "tableFrom": "calendars",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
           "columnsTo": [
-            "id"
+            "clerk_id"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -274,15 +274,15 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "global_settings_user_id_users_id_fk": {
-          "name": "global_settings_user_id_users_id_fk",
+        "global_settings_user_id_users_clerk_id_fk": {
+          "name": "global_settings_user_id_users_clerk_id_fk",
           "tableFrom": "global_settings",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
           "columnsTo": [
-            "id"
+            "clerk_id"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -313,8 +313,14 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(128)",
+          "type": "serial",
           "primaryKey": true,
+          "notNull": true
+        },
+        "clerk_id": {
+          "name": "clerk_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
           "notNull": true
         },
         "email": {
@@ -323,8 +329,14 @@
           "primaryKey": false,
           "notNull": true
         },
-        "name": {
-          "name": "name",
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_name": {
+          "name": "last_name",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
@@ -350,10 +362,56 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "clerk_id_idx": {
+          "name": "clerk_id_idx",
+          "columns": [
+            {
+              "expression": "clerk_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "email_idx": {
+          "name": "email_idx",
+          "columns": [
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "users_clerk_id_unique": {
+          "name": "users_clerk_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "clerk_id"
+          ]
+        },
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

@@ -1,17 +1,22 @@
-import { pgTable, varchar, timestamp, integer, boolean, text } from "drizzle-orm/pg-core";
+import { pgTable, varchar, timestamp, integer, boolean, text, serial, index } from "drizzle-orm/pg-core";
 
 /**
  * Users Table
  * Synchronized with Clerk auth
  */
 export const users = pgTable("users", {
-  id: varchar("id", { length: 128 }).primaryKey(), // Clerk User ID
-  email: varchar("email", { length: 255 }).notNull(),
-  name: varchar("name", { length: 255 }),
+  id: serial("id").primaryKey(),
+  clerkId: varchar("clerk_id", { length: 255 }).unique().notNull(),
+  email: varchar("email", { length: 255 }).unique().notNull(),
+  firstName: varchar("first_name", { length: 255 }),
+  lastName: varchar("last_name", { length: 255 }),
   imageUrl: text("image_url"),
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
-});
+}, (table) => [
+  index("clerk_id_idx").on(table.clerkId),
+  index("email_idx").on(table.email),
+]);
 
 /**
  * Calendars Table
@@ -21,7 +26,7 @@ export const calendars = pgTable("calendars", {
   id: varchar("id", { length: 128 }).primaryKey(),
   userId: varchar("user_id", { length: 128 })
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => users.clerkId, { onDelete: "cascade" }),
   name: varchar("name", { length: 255 }).notNull(),
   color: varchar("color", { length: 50 }).notNull(),
   birthDate: timestamp("birth_date", { mode: "date" }).notNull(),
@@ -66,7 +71,7 @@ export const events = pgTable("events", {
 export const globalSettings = pgTable("global_settings", {
   userId: varchar("user_id", { length: 128 })
     .primaryKey()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => users.clerkId, { onDelete: "cascade" }),
   activeCalendarId: varchar("active_calendar_id", { length: 128 }).references(() => calendars.id, { onDelete: "set null" }),
   weekStartsOn: integer("week_starts_on").notNull().default(1), // 0 = Sunday, 1 = Monday
   showFutureWeeks: boolean("show_future_weeks").notNull().default(true),

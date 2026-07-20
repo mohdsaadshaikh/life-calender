@@ -23,15 +23,15 @@ export async function POST(req: NextRequest) {
     if (!email) {
       return new Response('Missing email address', { status: 400 });
     }
-    const name = `${first_name ?? ''} ${last_name ?? ''}`.trim() || 'New User';
 
     try {
       // 1. Sync User to Database
       await db.insert(users).values({
-        id,
+        clerkId: id,
         email,
-        name,
-        imageUrl: image_url,
+        firstName: first_name ?? null,
+        lastName: last_name ?? null,
+        imageUrl: image_url ?? null,
       });
 
       // 2. Initialize Default Settings for this User
@@ -53,17 +53,17 @@ export async function POST(req: NextRequest) {
     if (!email) {
       return new Response('Missing email address', { status: 400 });
     }
-    const name = `${first_name ?? ''} ${last_name ?? ''}`.trim() || 'User';
 
     try {
       await db.update(users)
         .set({
           email,
-          name,
-          imageUrl: image_url,
+          firstName: first_name ?? null,
+          lastName: last_name ?? null,
+          imageUrl: image_url ?? null,
           updatedAt: new Date(),
         })
-        .where(eq(users.id, id));
+        .where(eq(users.clerkId, id));
     } catch (dbErr) {
       console.error('Failed to update user in database:', dbErr);
       return new Response('Database error', { status: 500 });
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
     if (id) {
       try {
         // Cascading deletes will remove associated calendars, events, and settings
-        await db.delete(users).where(eq(users.id, id));
+        await db.delete(users).where(eq(users.clerkId, id));
       } catch (dbErr) {
         console.error('Failed to delete user from database:', dbErr);
         return new Response('Database error', { status: 500 });
