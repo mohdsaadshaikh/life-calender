@@ -1,4 +1,6 @@
-import { drizzle } from "drizzle-orm/postgres-js";
+import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
+import { drizzle as drizzlePg } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
 
@@ -12,17 +14,9 @@ if (!connectionString && process.env.NODE_ENV === "production") {
 
 const dbUrl = connectionString || "postgresql://postgres:postgres@localhost:5432/life_calendar";
 
-// Prevent multiple connections during hot-reloads in Next.js development.
-const globalForDb = globalThis as unknown as {
-  conn: postgres.Sql | undefined;
-};
+const isNeon = dbUrl.includes("neon.tech");
 
-const conn = globalForDb.conn ?? postgres(dbUrl, {
-  prepare: false, // Disable prefetch for compatibility with connection poolers like PgBouncer
-});
+export const db = isNeon
+  ? drizzleNeon(neon(dbUrl), { schema })
+  : drizzlePg(postgres(dbUrl, { prepare: false }), { schema });
 
-if (process.env.NODE_ENV !== "production") {
-  globalForDb.conn = conn;
-}
-
-export const db = drizzle(conn, { schema });
