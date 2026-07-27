@@ -68,7 +68,7 @@ export function TimelineView({ onWeekClick }: TimelineViewProps) {
   return (
     <div ref={containerRef} className="relative pb-20">
       {/* Timeline Line */}
-      <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-muted neo-border">
+      <div className="absolute left-8 md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 w-1 bg-muted neo-border">
         <motion.div
           style={{ height: lineHeight }}
           className="w-full bg-primary"
@@ -88,31 +88,48 @@ export function TimelineView({ onWeekClick }: TimelineViewProps) {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true, margin: "-50px" }}
-              className={`relative flex items-center ${isEven ? "md:flex-row" : "md:flex-row-reverse"} flex-row`}
+              className={`relative flex items-center ${
+                isEven ? "md:flex-row" : "md:flex-row-reverse"
+              } flex-row`}
             >
               {/* Content */}
               <motion.div
                 whileHover={{ scale: 1.02, rotate: isEven ? 1 : -1 }}
                 onClick={() => week && onWeekClick(week)}
                 className={`
-                  ml-16 md:ml-0 md:w-[45%] cursor-pointer
-                  ${isEven ? "md:pr-8 md:text-right" : "md:pl-8 md:text-left"}
+                  flex-1 ml-16 md:ml-0 md:flex-none md:w-1/2 cursor-pointer
+                  ${isEven ? "md:pr-10 md:text-right" : "md:pl-10 md:text-left"}
                 `}
               >
                 <div
                   className="neo-border neo-shadow-lg p-6"
                   style={{ backgroundColor: event.color }}
                 >
-                  <span className="inline-block bg-card neo-border px-3 py-1 font-mono text-sm mb-3">
-                    {formatDate(new Date(event.startDate))}
-                    {event.endDate &&
-                      ` - ${formatDate(new Date(event.endDate))}`}
-                  </span>
-                  <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+                  <div
+                    className={`flex flex-wrap items-center gap-2 mb-3 ${
+                      isEven ? "justify-start md:justify-end" : "justify-start"
+                    }`}
+                  >
+                    <span className="inline-block bg-card neo-border px-3 py-1 font-mono text-sm">
+                      {formatDate(new Date(event.startDate))}
+                      {event.endDate &&
+                        ` - ${formatDate(new Date(event.endDate))}`}
+                    </span>
+                    {week && (
+                      <span className="inline-block md:hidden bg-card/80 neo-border px-2 py-1 font-mono text-xs font-bold">
+                        Yr {week.yearNumber}, Wk {week.weekNumber}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-xl font-bold mb-2 break-words">{event.title}</h3>
                   {event.description && (
-                    <p className="text-sm opacity-80">{event.description}</p>
+                    <p className="text-sm opacity-80 break-words">{event.description}</p>
                   )}
-                  <div className="mt-3 flex items-center gap-2 justify-start md:justify-end">
+                  <div
+                    className={`mt-3 flex items-center gap-2 ${
+                      isEven ? "justify-start md:justify-end" : "justify-start"
+                    }`}
+                  >
                     <span className="bg-card/80 neo-border px-2 py-1 text-xs font-bold">
                       {event.category.name}
                     </span>
@@ -139,8 +156,8 @@ export function TimelineView({ onWeekClick }: TimelineViewProps) {
               {week && (
                 <div
                   className={`
-                    hidden md:block md:w-[45%] text-muted-foreground font-mono
-                    ${isEven ? "md:pl-8 text-left" : "md:pr-8 text-right"}
+                    hidden md:block md:w-1/2 text-muted-foreground font-mono text-sm font-bold select-none
+                    ${isEven ? "md:pl-10 text-left" : "md:pr-10 text-right"}
                   `}
                 >
                   Year {week.yearNumber}, Week {week.weekNumber}

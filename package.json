@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^7.5.7",
+    "@clerk/ui": "^1.25.6",
     "@emotion/is-prop-valid": "latest",
     "@hookform/resolvers": "^3.10.0",
     "@neondatabase/serverless": "^1.1.0",

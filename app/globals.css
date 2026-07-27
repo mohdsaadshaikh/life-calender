@@ -228,3 +228,23 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #EC4899;
 }
+
+/* Clerk UserProfile - remove border-radius from navbar right side */
+.cl-navbar {
+  border-radius: 0 !important;
+}
+.cl-pageScrollBox {
+  border-radius: 0 !important;
+}
+.cl-page {
+  border-radius: 0 !important;
+}
+.cl-scrollBox {
+  border-radius: 0 !important;
+}
+.cl-cardBox {
+  border-radius: 0 !important;
+}
+.cl-userProfile-root {
+  border-radius: 0 !important;
+}

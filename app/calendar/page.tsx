@@ -9,11 +9,27 @@ import { CalendarSwitcher } from "@/components/life-calendar/calendar-switcher";
 import { ErrorBoundary } from "@/components/error-boundary";
 import type { WeekData, LifeEvent } from "@/lib/life-calendar-utils";
 import { calculateAge, safeFormatDate } from "@/lib/life-calendar-utils";
-import { Calendar, ArrowLeft, Flame, LogOut, Plus, Keyboard, HelpCircle, BarChart3, Clock, GitBranch, Search, ZoomIn, ZoomOut } from "lucide-react";
+import {
+  Calendar,
+  ArrowLeft,
+  Flame,
+  LogOut,
+  Plus,
+  Keyboard,
+  HelpCircle,
+  BarChart3,
+  Clock,
+  GitBranch,
+  Search,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { LogoIcon } from "@/components/ui/logo";
+
+import { Loader } from "@/components/ui/loader";
 
 // Lazy load heavy components
 const StatsDashboard = dynamic(
@@ -21,7 +37,9 @@ const StatsDashboard = dynamic(
     import("@/components/life-calendar/stats-dashboard").then((mod) => ({
       default: mod.StatsDashboard,
     })),
-  { loading: () => <LoadingPlaceholder /> },
+  {
+    loading: () => <Loader fullScreen={false} message="Loading analytics..." />,
+  },
 );
 
 const TimelineView = dynamic(
@@ -29,7 +47,9 @@ const TimelineView = dynamic(
     import("@/components/life-calendar/timeline-view").then((mod) => ({
       default: mod.TimelineView,
     })),
-  { loading: () => <LoadingPlaceholder /> },
+  {
+    loading: () => <Loader fullScreen={false} message="Loading timeline..." />,
+  },
 );
 
 const EventModal = dynamic(
@@ -37,7 +57,10 @@ const EventModal = dynamic(
     import("@/components/life-calendar/event-modal").then((mod) => ({
       default: mod.EventModal,
     })),
-  { ssr: false, loading: () => <LoadingPlaceholder /> },
+  {
+    ssr: false,
+    loading: () => <Loader fullScreen={false} message="Loading modal..." />,
+  },
 );
 
 const SettingsPanel = dynamic(
@@ -45,7 +68,10 @@ const SettingsPanel = dynamic(
     import("@/components/life-calendar/settings-panel").then((mod) => ({
       default: mod.SettingsPanel,
     })),
-  { ssr: false, loading: () => <LoadingPlaceholder /> },
+  {
+    ssr: false,
+    loading: () => <Loader fullScreen={false} message="Loading settings..." />,
+  },
 );
 
 const WeekDetailsPanel = dynamic(
@@ -53,60 +79,13 @@ const WeekDetailsPanel = dynamic(
     import("@/components/life-calendar/week-details-panel").then((mod) => ({
       default: mod.WeekDetailsPanel,
     })),
-  { ssr: false, loading: () => <LoadingPlaceholder /> },
+  {
+    ssr: false,
+    loading: () => (
+      <Loader fullScreen={false} message="Loading week details..." />
+    ),
+  },
 );
-
-
-function LoadingPlaceholder() {
-  return (
-    <div className="w-full h-96 bg-[#FCFBF9] neo-border rounded-lg animate-pulse flex items-center justify-center">
-      <div className="text-muted-foreground font-mono">Loading...</div>
-    </div>
-  );
-}
-
-function RetroLoader() {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F6F0E5] gap-6 horizons-bg select-none">
-      {/* Rotating Logo Icon */}
-      <motion.div
-        animate={{ 
-          rotate: [0, 90, 180, 270, 360],
-          scale: [1, 1.08, 1, 1.08, 1]
-        }}
-        transition={{ 
-          repeat: Infinity, 
-          duration: 3.5, 
-          ease: "easeInOut" 
-        }}
-      >
-        <LogoIcon className="w-16 h-16 drop-shadow-[4px_4px_0px_#000]" />
-      </motion.div>
-
-      {/* Retro Striped Progress Bar */}
-      <div className="w-64 h-6 bg-[#FCFBF9] border-[3px] border-black rounded-xl overflow-hidden shadow-[4px_4px_0px_#000] relative">
-        <motion.div
-          animate={{ x: ["-100%", "100%"] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "linear" }}
-          className="absolute inset-y-0 w-1/2 h-full bg-[#7ed957] border-r-[3px] border-black"
-          style={{
-            backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(0,0,0,0.08) 8px, rgba(0,0,0,0.08) 16px)"
-          }}
-        />
-      </div>
-
-      {/* Pulsing Text */}
-      <div className="text-center font-black uppercase text-sm tracking-widest font-mono text-black/70">
-        <motion.span
-          animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          Mapping your timeline...
-        </motion.span>
-      </div>
-    </div>
-  );
-}
 
 export default function CalendarPage() {
   const {
@@ -150,17 +129,6 @@ export default function CalendarPage() {
     }
   }, [mounted, isInitialized, router]);
 
-  // Extract active calendar details
-  const activeCalendar = calendars.find((c) => c.id === activeCalendarId) || null;
-  const calendarName = activeCalendar ? activeCalendar.name : "My Life";
-  const birthDate = activeCalendar ? new Date(activeCalendar.birthDate) : new Date(1998, 5, 20);
-  const lifeExpectancy = activeCalendar ? activeCalendar.lifeExpectancy : 90;
-
-  const age = calculateAge(birthDate);
-  const weeksLived = age.weeks;
-  const totalWeeks = lifeExpectancy * 52;
-  const percentageLived = Math.min(100, Math.max(0, (weeksLived / totalWeeks) * 100));
-
   // Keyboard navigation WASD & Arrows
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -181,14 +149,25 @@ export default function CalendarPage() {
 
       let nextIndex = -1;
       if (!selectedWeek) {
-        if (["w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(key)) {
+        if (
+          [
+            "w",
+            "a",
+            "s",
+            "d",
+            "arrowup",
+            "arrowdown",
+            "arrowleft",
+            "arrowright",
+          ].includes(key)
+        ) {
           setSelectedWeek(weeks[0]);
         }
         return;
       }
 
       const currentIndex = weeks.findIndex(
-        (w) => w.globalWeekNumber === selectedWeek.globalWeekNumber
+        (w) => w.globalWeekNumber === selectedWeek.globalWeekNumber,
       );
 
       if (key === "a" || e.key === "ArrowLeft") {
@@ -209,7 +188,34 @@ export default function CalendarPage() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedWeek, setSelectedWeek, getWeeksData, showEventModal, showSettings]);
+  }, [
+    selectedWeek,
+    setSelectedWeek,
+    getWeeksData,
+    showEventModal,
+    showSettings,
+  ]);
+
+  if (!mounted || !isInitialized) {
+    return <Loader message="Mapping your timeline..." fullScreen={true} />;
+  }
+
+  // Extract active calendar details
+  const activeCalendar =
+    calendars.find((c) => c.id === activeCalendarId) || null;
+  const calendarName = activeCalendar ? activeCalendar.name : "My Life";
+  const birthDate = activeCalendar
+    ? new Date(activeCalendar.birthDate)
+    : new Date(1998, 5, 20);
+  const lifeExpectancy = activeCalendar ? activeCalendar.lifeExpectancy : 90;
+
+  const age = calculateAge(birthDate);
+  const weeksLived = age.weeks;
+  const totalWeeks = lifeExpectancy * 52;
+  const percentageLived = Math.min(
+    100,
+    Math.max(0, (weeksLived / totalWeeks) * 100),
+  );
 
   const handleWeekClick = (week: WeekData) => {
     setSelectedWeek(week);
@@ -231,7 +237,7 @@ export default function CalendarPage() {
   };
 
   if (!mounted) {
-    return <RetroLoader />;
+    return <Loader fullScreen={true} />;
   }
 
   return (
@@ -259,7 +265,9 @@ export default function CalendarPage() {
 
           {/* Navigation Guide Capsule (Moved to top header) */}
           <div className="bg-white neo-border px-4 py-2 flex items-center justify-center gap-2.5 font-extrabold text-xs tracking-wide select-none shadow-[2px_2px_0px_#000]">
-            <span className="uppercase text-neutral-500 shrink-0 text-[10px]">USE</span>
+            <span className="uppercase text-neutral-500 shrink-0 text-[10px]">
+              USE
+            </span>
             <div className="flex gap-0.5">
               {["W", "A", "S", "D"].map((key) => (
                 <kbd
@@ -270,11 +278,15 @@ export default function CalendarPage() {
                 </kbd>
               ))}
             </div>
-            <span className="uppercase text-neutral-500 shrink-0 text-[10px]">OR</span>
+            <span className="uppercase text-neutral-500 shrink-0 text-[10px]">
+              OR
+            </span>
             <span className="bg-white border border-black rounded-full px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider select-none shadow-[1px_1px_0px_#000]">
               MOUSE
             </span>
-            <span className="uppercase text-black tracking-wider shrink-0 text-[10px]">TO NAVIGATE</span>
+            <span className="uppercase text-black tracking-wider shrink-0 text-[10px]">
+              TO NAVIGATE
+            </span>
           </div>
 
           {/* Subtitle */}
@@ -293,7 +305,10 @@ export default function CalendarPage() {
             <div className="bg-[#0C0A09] text-white neo-border-thick p-6 flex flex-col justify-between relative overflow-hidden min-h-[250px]">
               {/* Stylized Hourglass SVG Background */}
               <div className="absolute -top-2 -right-2 pointer-events-none opacity-15">
-                <svg className="w-32 h-32 stroke-white fill-none stroke-[1.5]" viewBox="0 0 24 24">
+                <svg
+                  className="w-32 h-32 stroke-white fill-none stroke-[1.5]"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M5 2h14" />
                   <path d="M5 22h14" />
                   <path d="M19 2v4c0 3-2 5-4 6c2 1 4 3 4 6v4" />
@@ -301,17 +316,29 @@ export default function CalendarPage() {
                   {/* Falling sand */}
                   <path d="M12 11.5v6" strokeDasharray="1 1" />
                   {/* Sand in top bulb */}
-                  <path d="M7 6.5c1.5 1 3.5 1 5 1s3.5 0 5-1V6H7v.5z" fill="white" className="opacity-40" />
+                  <path
+                    d="M7 6.5c1.5 1 3.5 1 5 1s3.5 0 5-1V6H7v.5z"
+                    fill="white"
+                    className="opacity-40"
+                  />
                   {/* Sand in bottom bulb */}
-                  <path d="M6 19.5c1.5-1 3.5-1.5 6-1.5s4.5.5 6 1.5V20H6v-.5z" fill="white" className="opacity-70" />
+                  <path
+                    d="M6 19.5c1.5-1 3.5-1.5 6-1.5s4.5.5 6 1.5V20H6v-.5z"
+                    fill="white"
+                    className="opacity-70"
+                  />
                 </svg>
               </div>
 
-
               <div>
-                <h3 className="text-2xl font-black tracking-tight">{calendarName} Progress</h3>
+                <h3 className="text-2xl font-black tracking-tight">
+                  {calendarName} Progress
+                </h3>
                 <p className="text-xs text-neutral-400 font-bold uppercase select-none mt-1">
-                  {safeFormatDate(birthDate)} • <span className="font-extrabold text-white/80">{age.years}y {age.months}m</span>
+                  {safeFormatDate(birthDate)} •{" "}
+                  <span className="font-extrabold text-white/80">
+                    {age.years}y {age.months}m
+                  </span>
                 </p>
               </div>
 
@@ -319,7 +346,9 @@ export default function CalendarPage() {
               <div className="relative z-10 space-y-2 mt-4">
                 <div className="flex justify-between items-end text-xs font-black uppercase">
                   <span>Lived progress</span>
-                  <span className="font-mono text-sm">{percentageLived.toFixed(1)}%</span>
+                  <span className="font-mono text-sm">
+                    {percentageLived.toFixed(1)}%
+                  </span>
                 </div>
                 <div className="w-full bg-[#1C1917] border-3 border-white rounded-xl h-8 p-1 flex items-center overflow-hidden">
                   <motion.div
@@ -333,8 +362,6 @@ export default function CalendarPage() {
                   {weeksLived}/{totalWeeks} WEEKS COMPLETED
                 </div>
               </div>
-
-
             </div>
           </section>
 
@@ -393,10 +420,11 @@ export default function CalendarPage() {
                         key={mode.id}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setViewMode(mode.id)}
-                        className={`px-3 py-1.5 text-xs font-black uppercase border-r-2 border-black last:border-r-0 cursor-pointer transition-all ${viewMode === mode.id
-                          ? "bg-primary text-black"
-                          : "bg-white text-black hover:bg-[#EFE8D8]"
-                          }`}
+                        className={`px-3 py-1.5 text-xs font-black uppercase border-r-2 border-black last:border-r-0 cursor-pointer transition-all ${
+                          viewMode === mode.id
+                            ? "bg-primary text-black"
+                            : "bg-white text-black hover:bg-[#EFE8D8]"
+                        }`}
                       >
                         {mode.label}
                       </motion.button>
@@ -427,7 +455,11 @@ export default function CalendarPage() {
 
               {/* View Content Area */}
               <div className="flex-1 flex flex-col justify-start">
-                <Suspense fallback={<LoadingPlaceholder />}>
+                <Suspense
+                  fallback={
+                    <Loader fullScreen={false} message="Loading view..." />
+                  }
+                >
                   {viewMode === "grid" && (
                     <CalendarGrid onWeekClick={handleWeekClick} />
                   )}
@@ -440,10 +472,6 @@ export default function CalendarPage() {
             </div>
           </section>
         </div>
-
-
-
-
 
         <AnimatePresence>
           {showSettings && (

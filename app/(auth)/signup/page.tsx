@@ -184,7 +184,7 @@ export default function SignUpPage() {
         });
         await signUp.finalize({
           navigate: ({ session, decorateUrl }) => {
-            const url = decorateUrl("/calendar?signup=true");
+            const url = decorateUrl("/calendar/onboarding");
             if (url.startsWith("http")) {
               window.location.href = url;
             } else {
@@ -216,7 +216,7 @@ export default function SignUpPage() {
       console.log("Initiating Google Sign Up SSO...");
       const res = await signUp.sso({
         strategy: "oauth_google",
-        redirectUrl: "/calendar?signup=true",
+        redirectUrl: "/calendar/onboarding",
         redirectCallbackUrl: "/sso-callback",
       });
       console.log("SSO result:", res);

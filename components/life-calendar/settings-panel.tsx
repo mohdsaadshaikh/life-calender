@@ -1,30 +1,32 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { motion } from "framer-motion"
-import { useState } from "react"
-import { Settings, Calendar, Clock, Download, Upload } from "lucide-react"
-import { useLifeCalendarStore } from "@/lib/life-calendar-store"
-import { Input } from "@/components/ui/input"
-import { Slider } from "@/components/ui/slider"
-import { useToast } from "@/hooks/use-toast"
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { Settings, Calendar, Clock, Download, Upload } from "lucide-react";
+import { useLifeCalendarStore } from "@/lib/life-calendar-store";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
+import { useToast } from "@/hooks/use-toast";
 
 interface SettingsPanelProps {
-  onClose: () => void
+  onClose: () => void;
 }
 
 export function SettingsPanel({ onClose }: SettingsPanelProps) {
-  const { settings, setSettings, events, categories } = useLifeCalendarStore()
-  const { toast } = useToast()
-  const [birthDateInput, setBirthDateInput] = useState(new Date(settings.birthDate).toISOString().split("T")[0])
+  const { settings, setSettings, events, categories } = useLifeCalendarStore();
+  const { toast } = useToast();
+  const [birthDateInput, setBirthDateInput] = useState(
+    new Date(settings.birthDate).toISOString().split("T")[0],
+  );
 
   const handleBirthDateChange = (value: string) => {
-    setBirthDateInput(value)
+    setBirthDateInput(value);
     if (value) {
-      setSettings({ birthDate: new Date(value) })
+      setSettings({ birthDate: new Date(value) });
     }
-  }
+  };
 
   const handleExport = () => {
     try {
@@ -33,74 +35,77 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
         events,
         categories,
         exportedAt: new Date().toISOString(),
-      }
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = `life-calendar-backup-${new Date().toISOString().split("T")[0]}.json`
-      a.click()
-      URL.revokeObjectURL(url)
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `life-calendar-backup-${new Date().toISOString().split("T")[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
 
       toast({
         title: "Success",
         description: "Calendar data exported successfully!",
-      })
+      });
     } catch (error) {
       toast({
         title: "Export Error",
         description: "Failed to export calendar data",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    const reader = new FileReader()
+    const reader = new FileReader();
 
     reader.onerror = () => {
       toast({
         title: "Error",
         description: "Failed to read file. Please try again.",
         variant: "destructive",
-      })
-    }
+      });
+    };
 
     reader.onload = (event) => {
       try {
-        const data = JSON.parse(event.target?.result as string)
+        const data = JSON.parse(event.target?.result as string);
 
         // Validate the imported data structure
         if (!data.settings) {
-          throw new Error("Invalid calendar file format")
+          throw new Error("Invalid calendar file format");
         }
 
         if (data.settings) {
           setSettings({
             ...data.settings,
             birthDate: new Date(data.settings.birthDate),
-          })
+          });
         }
 
         toast({
           title: "Success",
           description: "Calendar data imported successfully!",
-        })
+        });
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Invalid calendar file format"
+        const errorMessage =
+          err instanceof Error ? err.message : "Invalid calendar file format";
 
         toast({
           title: "Import Error",
           description: errorMessage,
           variant: "destructive",
-        })
+        });
       }
-    }
-    reader.readAsText(file)
-  }
+    };
+    reader.readAsText(file);
+  };
 
   return (
     <motion.div
@@ -118,10 +123,12 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
           <div className="bg-card neo-border p-2">
             <Settings className="w-5 h-5" />
           </div>
-          <h2 id="settings-panel-title" className="text-xl font-bold">SETTINGS</h2>
+          <h2 id="settings-panel-title" className="text-xl font-bold">
+            SETTINGS
+          </h2>
         </div>
         <motion.button
-          whileHover={{ scale: 1.1, rotate: 90 }}
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={onClose}
           className="bg-card neo-border neo-shadow px-4 py-2 font-bold"
@@ -132,11 +139,15 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
       </div>
 
       <form className="p-6 space-y-8">
-        {/* Birth Date - Fieldset */}
-        <fieldset>
-          <motion.legend initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 font-bold text-lg mb-3">
+        {/* Birth Date */}
+        <div className="space-y-3">
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-2 font-bold text-lg"
+          >
             <Calendar className="w-5 h-5" /> BIRTH DATE
-          </motion.legend>
+          </motion.h3>
           <Input
             id="birth-date-input"
             type="date"
@@ -146,27 +157,33 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
             required
             aria-required="true"
           />
-        </fieldset>
+        </div>
 
-        {/* Life Expectancy - Fieldset */}
-        <fieldset>
-          <motion.legend
+        {/* Life Expectancy */}
+        <div className="space-y-3">
+          <motion.h3
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="flex items-center gap-2 font-bold text-lg mb-3"
+            className="flex items-center gap-2 font-bold text-lg"
           >
             <Clock className="w-5 h-5" /> LIFE EXPECTANCY
-          </motion.legend>
+          </motion.h3>
           <div className="bg-muted neo-border p-4">
             <div className="flex justify-between mb-4">
-              <label htmlFor="life-expectancy-slider" className="font-mono">Years</label>
-              <span className="font-bold text-2xl" aria-live="polite">{settings.lifeExpectancy}</span>
+              <label htmlFor="life-expectancy-slider" className="font-mono">
+                Years
+              </label>
+              <span className="font-bold text-2xl" aria-live="polite">
+                {settings.lifeExpectancy}
+              </span>
             </div>
             <Slider
               id="life-expectancy-slider"
               value={[settings.lifeExpectancy]}
-              onValueChange={([value]) => setSettings({ lifeExpectancy: value })}
+              onValueChange={([value]) =>
+                setSettings({ lifeExpectancy: value })
+              }
               min={50}
               max={120}
               step={1}
@@ -178,18 +195,18 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
               <span>120</span>
             </div>
           </div>
-        </fieldset>
+        </div>
 
-        {/* Data Management - Fieldset */}
-        <fieldset>
-          <motion.legend
+        {/* Data Management */}
+        <div className="space-y-3">
+          <motion.h3
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="font-bold text-lg mb-3"
+            className="font-bold text-lg"
           >
             DATA MANAGEMENT
-          </motion.legend>
+          </motion.h3>
           <div className="space-y-3">
             <motion.button
               type="button"
@@ -222,35 +239,45 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
               />
             </label>
           </div>
-        </fieldset>
+        </div>
 
-        {/* Quick Stats - Fieldset */}
-        <fieldset className="bg-foreground text-background neo-border p-6" disabled>
-          <legend className="font-bold mb-4">QUICK STATS</legend>
+        {/* Quick Stats */}
+        <div className="bg-foreground text-background neo-border p-6">
+          <h3 className="font-bold text-lg mb-4 text-background tracking-wide">
+            QUICK STATS
+          </h3>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-primary neo-border p-3 text-center">
-              <p className="text-2xl font-bold text-foreground">{events.length}</p>
+              <p className="text-2xl font-bold text-foreground">
+                {events.length}
+              </p>
               <p className="text-xs font-bold text-foreground">Events</p>
             </div>
             <div className="bg-secondary neo-border p-3 text-center">
-              <p className="text-2xl font-bold text-foreground">{categories.length}</p>
+              <p className="text-2xl font-bold text-foreground">
+                {categories.length}
+              </p>
               <p className="text-xs font-bold text-foreground">Categories</p>
             </div>
             <div className="bg-accent neo-border p-3 text-center">
-              <p className="text-2xl font-bold text-foreground">{settings.lifeExpectancy * 52}</p>
+              <p className="text-2xl font-bold text-foreground">
+                {settings.lifeExpectancy * 52}
+              </p>
               <p className="text-xs font-bold text-foreground">Total Weeks</p>
             </div>
             <div className="bg-chart-4 neo-border p-3 text-center">
               <p className="text-2xl font-bold text-foreground">
                 {Math.floor(
-                  (new Date().getTime() - new Date(settings.birthDate).getTime()) / (1000 * 60 * 60 * 24 * 7),
+                  (new Date().getTime() -
+                    new Date(settings.birthDate).getTime()) /
+                    (1000 * 60 * 60 * 24 * 7),
                 )}
               </p>
               <p className="text-xs font-bold text-foreground">Weeks Lived</p>
             </div>
           </div>
-        </fieldset>
+        </div>
       </form>
     </motion.div>
-  )
+  );
 }
